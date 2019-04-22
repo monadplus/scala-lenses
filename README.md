@@ -66,6 +66,7 @@ The implementation of monocle is way more simple (and limited) than E. Kmett lib
 _Monocle lenses hierarchy_
 
 ![Class Diagram](http://i.imgur.com/ALlbPRa.png)
+
 _Lenses hierarchy in haskell_
  
 ## Composition
@@ -82,6 +83,6 @@ The result is their lowest upper bound in the hierarchy (or an error if that bou
 | **Setter**    | -          | Setter     | Setter     | Setter       | Setter     | **Setter** | Setter        |
 | **Traversal** | Fold       | Traversal  | Traversal  | Traversal    | Traversal  | Setter     | **Traversal** |
 
-##Credits: 
+## Credits: 
  - https://github.com/julien-truffaut/Monocle (J. Truffaut et al)
  - https://hackage.haskell.org/package/lens (E. Kmett)
