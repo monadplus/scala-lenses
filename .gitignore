@@ -3,3 +3,4 @@ target
 .metals
 .bloop
 .vscode
+node_modules/

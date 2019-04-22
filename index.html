@@ -4,14 +4,21 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>The magic of composition</title>
 
-		<link rel="stylesheet" href="css/reset.css">
+		<!--<link rel="stylesheet" href="css/reset.css">-->
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/beige.css">
 
 		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/monokai.css">
+		<link rel="stylesheet" href="lib/css/solarized-light.css">
+
+		<style>
+			code.smaller {
+				font-size: 0.6em;
+				line-height: 1.2em;
+			}
+    	</style>
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -25,14 +32,283 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<!--intro-->
+				<section>
+					<section>
+						<h2><a>The magic of composition</a></h2>
+						<h3>Diving into van Laarhoven optics</h3>
+						<p><small>Arnau Abella - Software Engineer @ Agilogy</small></p>
+						<p><small>May 3th, 2019 | Barcelona, Spain</small></p>
+						<br/><br/>
+						<small>Sources: <a href="https://github.com/monadplus/scala-lenses" target="_blank">here</a></small>
+					</section>
+					<section>
+						<h3><a>About me</a></h3>
+						<!--<br/>-->
+						<div style="display: block; height: 80%; width: 80%; margin-left: auto; margin-right: auto">
+							<img src="./images/github.png"/>
+						</div>
+						<p><small>More information <a href="https://monadplus.github.io/" target="_blank">here</a></small></p>
+					</section>
+				</section>
+				<!--intro-->
+				<!--Motivation-->
+				<section>
+					<section data-markdown>
+						<textarea data-template>
+							### Motivation
+
+							Updating a nested data structure.
+
+							```scala
+							case class Street(number: Int, name: String)
+							case class Address(city: String, street: Street)
+							case class Company(name: String, address: Address)
+							case class Employee(name: String, company: Company)
+							```
+							<!-- .element: class="fragment" -->
+
+							```scala
+							val employee =
+							  Employee(
+							    name = "john",
+							    company = Company(
+							      name = "awesome inc",
+							      address =  Address("london", Street(23, "high street"))
+							    )
+							  )
+							```
+							<!-- .element: class="fragment" -->
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							Plain scala
+
+							```scala
+							employee.copy(
+							  company = employee.company.copy(
+								address = employee.company.address.copy(
+								  street = employee.company.address.street.copy(
+									name = employee.company.address.street.name.capitalize // luckily capitalize exists
+								  )
+								)
+							  )
+							)
+							```
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							Using lenses
+
+							```scala
+							(company composeLens
+							 address composeLens
+							 street composeLens streetName).modify(_.capitalize)(employee)
+							```
+						</textarea>
+					</section>
+				</section>
+				<!--Libraries-->
+				<section>
+					<section data-markdown>
+						<textarea data-template>
+							## Libraries
+
+							Lenses provides __more composable__ versions of the abstractions you already known how to use in Haskell/Scala.
+
+							 - [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals) (haskell)
+							 - [monocle](https://github.com/julien-truffaut/Monocle) (scala)
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							Both libraries provides rich APIs to work with lenses and a battery of utilities to make your life easier.
+
+							From my point of view, it's easier to start with [monocle](https://github.com/julien-truffaut/Monocle)
+							and follow with [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals).
+							The implementation of monocle is way more simple (and limited) than E. Kmett library.
+						</textarea>
+					</section>
+				</section>
+				<!--hierarchy-->
+				<section>
+					<section>
+						<h3>Lenses hierarchy</h3>
+					</section>
+					<section>
+						<p><a>Lenses (haskell)</a></p>
+						<img src="./images/lens-hierarchy.png" style="width: 600px; height: 500px;"/>
+					</section>
+					<section>
+						<p><a>Monocle (scala)</a></p>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+				</section>
+				<!--Composition-->
+				<section>
+					<h3>Composition</h3>
+					<p>The result is their lowest upper bound in the hierarchy (or an error if that bound doesn't exist).</p>
+					<div style="display: block; height: 80%; width: 80%; margin-left: auto; margin-right: auto">
+						<img src="./images/composition.png"/>
+					</div>
+				</section>
+				<!--Fold-->
+				<section>
+					<h3>Fold</h3>
+				</section>
+				<!--Getter-->
+				<section>
+					<h3>Getter</h3>
+				</section>
+				<!--Setter-->
+				<section>
+					<h3>Setter</h3>
+				</section>
+				<!--Composition break-->
+				<section>
+					<h3>Break</h3>
+					<p>Let's talk about composition</p>
+				</section>
+				<!--Traversal-->
+				<section>
+					<h3>Traversal</h3>
+				</section>
+				<!--Optional-->
+				<section>
+					<h3>Optional</h3>
+				</section>
+				<!--Lens-->
+				<section>
+					<h3>Lens</h3>
+				</section>
+				<!--Prism-->
+				<section>
+					<h3>Prism</h3>
+				</section>
+				<!--Iso-->
+				<section>
+					<h3>Iso</h3>
+				</section>
+				<!--Alias-->
+				<section>
+					<h3>Aliases</h3>
+					<p class="fragment">Lens are polymorphic!</p>
+					<img class="fragment" style="width: 400px; height: 400px" src="./images/alias.png"/>
+				</section>
+				<!--At-->
+				<section>
+					<h3>At</h3>
+				</section>
+				<!--Each-->
+				<section>
+					<h3>Each</h3>
+				</section>
+				<!--Field-->
+				<section>
+					<h3>Field1 .. Field6</h3>
+				</section>
+				<!--Index-->
+				<section>
+					<h3>Index / IndexFilter</h3>
+				</section>
+				<!--Plated-->
+				<section>
+					<h3>Plated</h3>
+				</section>
+				<!--Conclusion-->
+				<section>
+					<section>
+						<h2>Conclusion</h2>
+						<p>Lenses are not magic!</p>
+						<p>
+							<small>Lenses provide a rich and composable abstraction to manipulate functional data structures in an imperative way</small>
+						</p>
+					</section>
+					<section>
+						<p><small>Monocle is a wonderful library.</small></p>
+						<img src="./images/monocle-logo.png"/>
+						<p><small>Give it a try !</small></p>
+					</section>
+				</section>
+				<!--Next steps-->
+				<section>
+					<section data-markdown>
+						<textarea data-template>
+							## Next steps
+
+							For the curious ones, [monocle](https://github.com/julien-truffaut/Monocle) has more to offer:
+
+							 - scala.js compatibility <!-- .element: class="fragment" -->
+							 - scala native compatibility<!-- .element: class="fragment" -->
+							 - Generics integration<!-- .element: class="fragment" -->
+							 - Refined integration<!-- .element: class="fragment" -->
+							 - Reader/State instances<!-- .element: class="fragment" -->
+							 - Laws testing<!-- .element: class="fragment" -->
+						</textarea>
+					</section>
+					<section>
+						<p>For the brave ones, dive into <a href="https://github.com/ekmett/lens#lens-lenses-folds-and-traversals" target="_blank">
+							lenses</a> and master 'em all!</p>
+						<img src="./images/kmett.jpg"/>
+					</section>
+				</section>
+				<!--acknowledge-->
+				<section>
+					<section>
+						<h3>Acknowledgements</h3>
+						<p>This talk wouldn't be possible without countless hours of work of:</p>
+						<ul>
+							<li>
+								<p>J. Truffaut et al (<a href="https://github.com/julien-truffaut/Monocle" target="_blank">monocle</a>)</p>
+							</li>
+							<li>
+								<p>E. Kmett et al (<a href="https://hackage.haskell.org/package/lens" target="_blank">lenses</a>)</p>
+							</li>
+							<li>
+								<p>Many others</p>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<p>
+							Kudos to <a href="https://github.com/kubukoz" target="_blank">Jakub Kozłowski</a> for helping me with the slides.
+						</p>
+					</section>
+				</section>
+				<!--Questions-->
+				<section>
+					<h2>Questions ?</h2>
+					<ul>
+						<li>Reach me out on Gitter <a href="https://github.com/monadplus" target="_blank">@monadplus</a>!</li>
+					</ul>
+				</section>
 			</div>
 		</div>
 
 		<script src="js/reveal.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 		<script>
+		    const Embed = ({fetchFileContents}) => {
+				return {
+					insertCode: async elem => {
+						const path = elem.getAttribute("embed");
+						const lineFrom = elem.getAttribute("line-from") || 1
+						const lineTo = elem.getAttribute("line-to") || undefined
+						const fileContents = await fetchFileContents(path);
+						elem.textContent = fileContents.split("\n").slice(lineFrom - 1, lineTo).join("\n")
+					},
+					async init() {
+						const self = this;
+						const elems = document.querySelectorAll("[embed]");
+						await Promise.all([...elems].map(self.insertCode));
+						console.log(`Inserted code for ${elems.length} node(s)`);
+					}
+				};
+			};
+
 			// More info about config & dependencies:
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
@@ -41,9 +317,19 @@
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true }
+					<!--{ src: 'plugin/highlight/highlight.js', async: true }-->
+					 {
+						src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+							hljs.initHighlightingOnLoad();
+						}
+					}
 				]
 			});
+
+			axios.defaults.baseURL = './core/src/main/scala/io/monadplus/scalalens/';
+			Embed({
+				fetchFileContents: path => axios.get(path).then(r => r.data)
+			}).init();
 		</script>
 	</body>
 </html>
