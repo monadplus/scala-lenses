@@ -3,7 +3,11 @@ package io.monadplus.scalalens
 import monocle.Optional
 
 /*
-  Lens where the zoomed element may not exist.
+  POptional can be seen as a weaker Lens/Prism.
+
+  A POptional can be seen as pair of functions:
+    getOrModify :: s -> Either t a
+    set :: (b, s) -> t
  */
 object OptionalExample extends App {
 
@@ -20,8 +24,8 @@ object OptionalExample extends App {
   val xs = List(1, 2, 3)
   val ys = List.empty[Int]
 
-  println(s"Setting head of nonEmptyList: ${head.set(5)(xs)}")
-  println(s"Setting head of emptyList: ${head.set(5)(ys)}")
+  head.set(5)(xs) // List(5, 2, 3)
+  head.set(5)(ys) // Nil
 
   head.getOption(xs) // Some(1)
   head.getOption(ys) // None

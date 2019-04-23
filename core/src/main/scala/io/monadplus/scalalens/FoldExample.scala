@@ -11,7 +11,8 @@ import mouse.all._
 
  It allows you to extract multiple results from a container.
 
- A Foldable container can be characterized by the behavior of foldMap :: (Foldable t, Monoid m) => (a -> m) -> t a -> m.
+ A Foldable container can be characterized by the behavior
+  of foldMap :: (Foldable t, Monoid m) => (a -> m) -> t a -> m.
 
  Since we want to be able to work with monomorphic containers, we could generalize this signature
  to forall m. Monoid m => (a -> m) -> s -> m, and then decorate it with Const to obtain
@@ -29,7 +30,6 @@ import mouse.all._
 
 object FoldExample extends App {
   val list = (1 to 10).toList
-  val maybeList = (1 to 10).toList.map(i => (i % 2 == 0).fold(First(i.some), First(none[Int])))
   val set = (1 to 10).toSet
 
   val setFold = new Fold[Set[Int], Int] {
@@ -46,10 +46,13 @@ object FoldExample extends App {
   val sum2 = setFold.foldMap(Sum.apply)(set)
   println(s"(Set) Sum of values: ${sum2.value}")
 
+  println(s"Set to List: ${setFold.getAll(set)}")
+
+  val maybeList =
+    (1 to 10).toList.map(i => (i % 2 == 0).fold(First(i.some), First(none[Int])))
+
   val sum3 = Fold.fromFoldable[List, First[Int]].fold(maybeList)
   println(s"(Maybe List) Get first: ${sum3.value}")
-
-  println(s"Set to List: ${setFold.getAll(set)}")
 
   val evenFold = Fold.select[Int](_ % 2 == 0)
   val sum4 = listFold.composeFold(evenFold).foldMap(Sum.apply)(list)

@@ -32,7 +32,7 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<!--intro-->
+				<!--Intro-->
 				<section>
 					<section>
 						<h2><a>The magic of composition</a></h2>
@@ -51,14 +51,14 @@
 						<p><small>More information <a href="https://monadplus.github.io/" target="_blank">here</a></small></p>
 					</section>
 				</section>
-				<!--intro-->
 				<!--Motivation-->
 				<section>
 					<section data-markdown>
 						<textarea data-template>
 							### Motivation
 
-							Updating a nested data structure.
+							Let's update a nested data structure in plain scala.
+							<!-- .element: class="fragment" data-fragment-index="1" -->
 
 							```scala
 							case class Street(number: Int, name: String)
@@ -66,7 +66,7 @@
 							case class Company(name: String, address: Address)
 							case class Employee(name: String, company: Company)
 							```
-							<!-- .element: class="fragment" -->
+							<!-- .element: class="fragment" data-fragment-index="2" -->
 
 							```scala
 							val employee =
@@ -78,7 +78,7 @@
 							    )
 							  )
 							```
-							<!-- .element: class="fragment" -->
+							<!-- .element: class="fragment" data-fragment-index="2"-->
 						</textarea>
 					</section>
 					<section data-markdown>
@@ -118,8 +118,8 @@
 
 							Lenses provides __more composable__ versions of the abstractions you already known how to use in Haskell/Scala.
 
-							 - [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals) (haskell)
-							 - [monocle](https://github.com/julien-truffaut/Monocle) (scala)
+							  - [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals) (haskell)
+							  - [monocle](https://github.com/julien-truffaut/Monocle) (scala)
 						</textarea>
 					</section>
 					<section data-markdown>
@@ -156,66 +156,270 @@
 				</section>
 				<!--Fold-->
 				<section>
-					<h3>Fold</h3>
+					<section>
+						<h3>Fold</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section>
+						<h3>Definition</h3>
+						<pre><code class="scala" embed="FoldExample.scala" line-from="10" line-to="15"></code></pre>
+					</section>
+					<section>
+						<h3>The signature</h3>
+						<pre><code class="scala" embed="FoldExample.scala" line-from="20" line-to="22"></code></pre>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="32" line-to="33"></code></pre>
+						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="35" line-to="41"></code></pre>
+						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="43" line-to="49"></code></pre>
+					</section>
+					<section>
+						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="51" line-to="52"></code></pre>
+						<pre class="fragment"><code class="scala" embed="extras/First.scala" line-from="5" line-to="15"></code></pre>
+						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="54" line-to="59"></code></pre>
+					</section>
 				</section>
 				<!--Getter-->
 				<section>
-					<h3>Getter</h3>
+					<section>
+						<h3>Getter</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section>
+						<h3>Definition</h3>
+						<pre class="fragment"><code class="haskell">
+Getter :: (s -> a)
+
+	   f ::     (s -> a)
+	   f_cps ::  s -> ((a -> r) -> r)
+	   f_cps :: (a -> r) -> s -> r
+
+
+type Getting r s a = (a -> Const r a) -> s -> Const r s
+type Getter s a = forall r. Getting r s a
+</code></pre>
+						<p class="fragment"><small>Everything you can do with a function, you can do with a Getter.</small></p>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre><code class="scala" embed="GetterExample.scala" line-from="31" line-to="41"></code></pre>
+					</section>
 				</section>
 				<!--Setter-->
 				<section>
-					<h3>Setter</h3>
+					<section>
+						<h3>Setter</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section>
+						<h3>Definition</h3>
+						<p class="fragment"><small>Everything you can do with a Functor, you can do with a Setter.</small></p>
+						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="10" line-to="20"></code></pre>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="28" line-to="31"></code></pre>
+						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="36" line-to="41"></code></pre>
+						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="45" line-to="46"></code></pre>
+					</section>
+					<section>
+						<h3>Derivation</h3>
+						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="48" line-to="52"></code></pre>
+					</section>
+					<section>
+						<h3>Laws</h3>
+						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="55" line-to="68"></code></pre>
+					</section>
 				</section>
 				<!--Composition break-->
-				<section>
-					<h3>Break</h3>
-					<p>Let's talk about composition</p>
+				<section data-markdown="./core/src/main/scala/io/monadplus/scalalens/composition.md"
+						 data-separator="^\n\n\n"
+						 data-separator-vertical="^\n\n">
+
 				</section>
 				<!--Traversal-->
 				<section>
-					<h3>Traversal</h3>
+					<section>
+						<h3>Traversal</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section>
+						<h3>Definition</h3>
+						<p class="fragment"><small>Everything you can do with a Traversable, you can do with a Traversal.</small></p>
+						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="9" line-to="13"></code></pre>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="22" line-to="32"></code></pre>
+					</section>
+					<section>
+						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="34" line-to="39"></code></pre>
+						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="41" line-to="54"></code></pre>
+					</section>
+					<section>
+						<h3>Laws</h3>
+						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="57" line-to="64"></code></pre>
+					</section>
 				</section>
 				<!--Optional-->
 				<section>
-					<h3>Optional</h3>
+					<section>
+						<h3>Optional</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h3>Definition</h3>
+						<p class="fragment"><small>A lens where the zoomed element may not exist.</small></p>
+						<pre class="fragment"><code class="scala" embed="OptionalExample.scala" line-from="6" line-to="10"></code></pre>
+						<aside class="notes">
+							Optional is not interesting.
+							Not found in lenses.
+						</aside>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala" embed="OptionalExample.scala" line-from="14" line-to="22"></code></pre>
+						<pre class="fragment"><code class="scala" embed="OptionalExample.scala" line-from="24" line-to="25"></code></pre>
+						<pre class="fragment"><code class="scala" embed="OptionalExample.scala" line-from="27" line-to="31"></code></pre>
+					</section>
 				</section>
 				<!--Lens-->
 				<section>
-					<h3>Lens</h3>
+					<section>
+						<h3>Lens</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h3>Definition</h3>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="15" line-to="17"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="12" line-to="13"></code></pre>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="30" line-to="33"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="35" line-to="36"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="38" line-to="39"></code></pre>
+					</section>
+					<section data-transition="zoom-in fade-out">
+						<pre><code class="scala" embed="LensExample.scala" line-from="41" line-to="45"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="52" line-to="58"></code></pre>
+					</section>
+					<section>
+						<h3>Laws</h3>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="67" line-to="69"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="71" line-to="73"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="75" line-to="77"></code></pre>
+					</section>
+					<section>
+						<h3>Derivation</h3>
+						<pre><code class="scala">
+  case class Address(streetNumber: Int, streetName: String)
+  case class Person(name: String, age: Int, address: Address)
+						</code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="91" line-to="96"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="98" line-to="103"></code></pre>
+					</section>
+					<section data-transition="none-in fade-out">
+						<pre><code class="scala" embed="LensExample.scala" line-from="88" line-to="89"></code></pre>
+						<pre class="fragment" data-fragment-index="1"><code class="scala" embed="LensExample.scala" line-from="105"
+																			line-to="105"></code></pre>
+						<pre class="fragment" data-fragment-index="1"><code class="scala" embed="LensExample.scala" line-from="107" line-to="117"></code></pre>
+						<aside class="notes">
+							Polymorphic lens can also be derived t he same way.
+						</aside>
+					</section>
 				</section>
 				<!--Prism-->
 				<section>
-					<h3>Prism</h3>
+					<section>
+						<h3>Prism</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h3>Definition</h3>
+						<p class="fragment"><small>A Prism usually encodes  the relation between a Coproduct type and one of its elements.</small></p>
+						<pre class="fragment">
+							<code class="haskell">type Prism s t a b = forall p f. (Choice p, Applicative f) => p a	(f b) -> p s (f t)</code>
+						</pre>
+						<p class="fragment">
+							<small>A <b>Prism</b> is a <b>Traversal</b> that can also be turned around with re to obtain a <b>Getter</b> in
+							the opposite direction.</small>
+						</p>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="34" line-to="40"></code></pre>
+						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="31" line-to="31"></code></pre>
+						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="55" line-to="58"></code></pre>
+					</section>
+					<section>
+						<h3>Laws</h3>
+						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="64" line-to="73"></code></pre>
+					</section>
+					<section>
+						<h3>Real World Example</h3>
+						<div class="fragment">
+							<pre><code class="scala" embed="PrismExample.scala" line-from="76" line-to="79"></code></pre>
+							<pre><code class="scala" embed="PrismExample.scala" line-from="81" line-to="99"></code></pre>
+						</div>
+					</section>
+					<section>
+						<pre><code class="scala" embed="PrismExample.scala" line-from="141" line-to="148"></code></pre>
+					</section>
 				</section>
 				<!--Iso-->
 				<section>
-					<h3>Iso</h3>
+					<section>
+						<h3>Iso</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h3>Definition</h3>
+						<p class="fragment"><small>A valid Lens and a valid Prism.</small></p>
+						<pre class="fragment">
+							<code class="haskell">type Iso s t a b = forall p f. (Profunctor p, Functor f) => p a (f b) -> p s (f t) </code>
+						</pre>
+					</section>
 				</section>
 				<!--Alias-->
-				<section>
-					<h3>Aliases</h3>
-					<p class="fragment">Lens are polymorphic!</p>
-					<img class="fragment" style="width: 400px; height: 400px" src="./images/alias.png"/>
+				<section data-markdown="./core/src/main/scala/io/monadplus/scalalens/alias.md"
+						 data-separator="^\n\n\n"
+						 data-separator-vertical="^\n\n">
+					<aside class="notes">
+						Types are polymorphics.
+					</aside>
 				</section>
-				<!--At-->
+				<!--Monocle functions-->
 				<section>
-					<h3>At</h3>
-				</section>
-				<!--Each-->
-				<section>
-					<h3>Each</h3>
-				</section>
-				<!--Field-->
-				<section>
-					<h3>Field1 .. Field6</h3>
-				</section>
-				<!--Index-->
-				<section>
-					<h3>Index / IndexFilter</h3>
-				</section>
-				<!--Plated-->
-				<section>
-					<h3>Plated</h3>
+					<section data-markdown>
+						<textarea data-template>
+							## Helpers
+
+							Here is a list of all available utility type classes from monocle:
+							 - At
+							 - Cons & Cons1
+							 - Each
+							 - Field1, ..., Field6 & Fields
+							 - FilterIndex
+							 - Index
+							 - ...
+						</textarea>
+					</section>
+					<section>
+						<h3>Example: At</h3>
+						<pre><code class="scala" embed="functions/atExample.scala" line-from="22" line-to="35"></code></pre>
+						<pre class="fragment"><code class="scala" embed="functions/atExample.scala" line-from="39" line-to="42"></code></pre>
+					</section>
+					<section>
+						<h3>Example: Refined + At</h3>
+						<pre><code class="scala" embed="functions/atExample.scala" line-from="47" line-to="49"></code></pre>
+					</section>
+					<section>
+						<h3>Example: Each</h3>
+						<pre><code class="scala" embed="functions/eachExample.scala" line-from="12" line-to="13"></code></pre>
+						<pre><code class="scala" embed="functions/eachExample.scala" line-from="22" line-to="23"></code></pre>
+					</section>
 				</section>
 				<!--Conclusion-->
 				<section>
@@ -223,7 +427,8 @@
 						<h2>Conclusion</h2>
 						<p>Lenses are not magic!</p>
 						<p>
-							<small>Lenses provide a rich and composable abstraction to manipulate functional data structures in an imperative way</small>
+							<small>Lenses provide a rich and
+								<b>composable</b> abstraction to manipulate functional data structures in an imperative way</small>
 						</p>
 					</section>
 					<section>
@@ -324,6 +529,9 @@
 						}
 					}
 				]
+			});
+			Reveal.configure({
+			  navigationMode: 'linear'
 			});
 
 			axios.defaults.baseURL = './core/src/main/scala/io/monadplus/scalalens/';

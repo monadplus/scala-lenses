@@ -1,3 +1,5 @@
+## Type Alias
+
 |       Alias     |         Type          |
 | --------------- |:----------------------:|
 | Setter[S, A]    | PSetter[S, S, A, A]    |

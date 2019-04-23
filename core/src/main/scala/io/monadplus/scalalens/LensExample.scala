@@ -9,24 +9,26 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global // derive Functor instance for Future
 
 /*
+  type Lens s t a b = forall f. Functor f => (a -> f b) -> s -> f t
+  type Lens' s a = Lens s s a a
 
-With great power comes great responsibility and a Lens is subject to the three common sense Lens laws:
+  A lens can be seen as pair of function:
+    get :: s -> a
+    set :: (b, s) -> t
 
-  1) You get back what you put in:
+  Every Lens is a valid Setter.
 
-  view l (set l v s)  ≡ v
+  Every Lens can be used for Getting like a Fold that doesn't use the Applicative or Contravariant.
 
-  2) Putting back what you got doesn't change anything:
+  Every Lens is a valid Traversal that only uses the Functor part of the Applicative it is supplied.
 
-  set l (view l s) s  ≡ s
+  Every Lens can be used for Getting like a valid Getter.
 
-  3) Setting twice is the same as setting once:
-
-  set l v' (set l v s) ≡ set l v' s
-
+  Since every Lens can be used for Getting like a valid Getter it follows that it must view exactly one element in the structure.
  */
 object LensExample extends App {
   case class Address(streetNumber: Int, streetName: String)
+
   val address = Address(1, "The shire")
   val address2 = Address(2, "Mordor")
 
@@ -58,6 +60,23 @@ object LensExample extends App {
 
 object LensLaws {
 
+  /*
+
+  With great power comes great responsibility and a Lens is subject to the three common sense Lens laws:
+
+    1) You get back what you put in:
+
+    view l (set l v s)  ≡ v
+
+    2) Putting back what you got doesn't change anything:
+
+    set l (view l s) s  ≡ s
+
+    3) Setting twice is the same as setting once:
+
+    set l v' (set l v s) ≡ set l v' s
+
+   */
   def setGet[S, A](l: Lens[S, A], s: S, a: A): Boolean =
     l.get(l.set(a)(s)) == a
 

@@ -37,7 +37,9 @@ object atExample extends App {
   val cookers = GenLens[Restaurant](_.cookers)
 
   // Read & Write
-  cookers.composeLens(at("Wednesday")).modify(_.fold(Cooker("Maria").some)(_ => None))(restaurant)
+  cookers
+    .composeLens(at("Wednesday"))
+    .modify(_.fold(Cooker("Maria").some)(c => Some(c)))(restaurant)
 
   // Delete
   cookers.composeLens(at("Wednesday")).set(None)(restaurant)

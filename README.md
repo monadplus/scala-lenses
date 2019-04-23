@@ -1,7 +1,9 @@
 # The magic of composition 
 
 During this talk, we are going to dive into _Van Laarhoven_ __optics__ and 
-unravel the mystery surrounding __lenses__. 
+unravel the mystery surrounding __lenses__.
+
+Slides [here](https://monadplus.github.io/scala-lenses/). 
 
 ## Public
 
