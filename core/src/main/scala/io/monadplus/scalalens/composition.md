@@ -4,6 +4,7 @@
 (.) :: (b -> c) -> (a -> b) -> a -> c
 (.) g f a = g(f(a))
 ```
+![composition](../../../../../../../images/composition2.jpg)
 
 
 ## The power of (.)

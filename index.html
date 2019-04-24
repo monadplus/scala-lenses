@@ -41,6 +41,9 @@
 						<p><small>May 3th, 2019 | Barcelona, Spain</small></p>
 						<br/><br/>
 						<small>Sources: <a href="https://github.com/monadplus/scala-lenses" target="_blank">here</a></small>
+						<aside class="notes">
+							Remark the repository.
+						</aside>
 					</section>
 					<section>
 						<h3><a>About me</a></h3>
@@ -122,14 +125,15 @@
 							  - [monocle](https://github.com/julien-truffaut/Monocle) (scala)
 						</textarea>
 					</section>
-					<section data-markdown>
-						<textarea data-template>
-							Both libraries provides rich APIs to work with lenses and a battery of utilities to make your life easier.
-
-							From my point of view, it's easier to start with [monocle](https://github.com/julien-truffaut/Monocle)
-							and follow with [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals).
-							The implementation of monocle is way more simple (and limited) than E. Kmett library.
-						</textarea>
+					<section>
+						<p>Both libraries provides rich APIs to work with lenses and a battery of utilities to make your life easier.</p>
+						<aside class="notes">
+							Monocle is easy to use.
+						</aside>
+					</section>
+					<section>
+						<img src="./images/signature.png"/>
+						<img class="fragment" src="http://www.reactiongifs.com/r/lolof1.gif"/>
 					</section>
 				</section>
 				<!--hierarchy-->
@@ -140,6 +144,9 @@
 					<section>
 						<p><a>Lenses (haskell)</a></p>
 						<img src="./images/lens-hierarchy.png" style="width: 600px; height: 500px;"/>
+						<aside class="notes">
+							A lot of type aliases
+						</aside>
 					</section>
 					<section>
 						<p><a>Monocle (scala)</a></p>
@@ -163,6 +170,10 @@
 					<section>
 						<h3>Definition</h3>
 						<pre><code class="scala" embed="FoldExample.scala" line-from="10" line-to="15"></code></pre>
+						<aside class="notes">
+							Fold = Foldable
+							Extract results from container
+						</aside>
 					</section>
 					<section>
 						<h3>The signature</h3>
@@ -188,6 +199,7 @@
 					</section>
 					<section>
 						<h3>Definition</h3>
+						<p class="fragment"><small>Everything you can do with a function, you can do with a Getter.</small></p>
 						<pre class="fragment"><code class="haskell">
 Getter :: (s -> a)
 
@@ -199,7 +211,9 @@ Getter :: (s -> a)
 type Getting r s a = (a -> Const r a) -> s -> Const r s
 type Getter s a = forall r. Getting r s a
 </code></pre>
-						<p class="fragment"><small>Everything you can do with a function, you can do with a Getter.</small></p>
+						<aside class="notes">
+							Getter = Function
+						</aside>
 					</section>
 					<section>
 						<h3>Example</h3>
@@ -216,6 +230,10 @@ type Getter s a = forall r. Getting r s a
 						<h3>Definition</h3>
 						<p class="fragment"><small>Everything you can do with a Functor, you can do with a Setter.</small></p>
 						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="10" line-to="20"></code></pre>
+						<aside class="notes">
+							Setter = Functor
+							Modify content but not enumerate it.
+						</aside>
 					</section>
 					<section>
 						<h3>Example</h3>
@@ -356,6 +374,9 @@ type Getter s a = forall r. Getting r s a
 					<section>
 						<h3>Laws</h3>
 						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="64" line-to="73"></code></pre>
+					</section>
+					<section data-background-image="./images/circe.png">
+						<h3 style="color: green">Optics are used in the real world!</h3>
 					</section>
 					<section>
 						<h3>Real World Example</h3>
