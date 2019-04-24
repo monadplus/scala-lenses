@@ -1,9 +1,9 @@
 # The magic of composition 
 
-During this talk, we are going to dive into _Van Laarhoven_ __optics__ and 
-unravel the mystery surrounding __lenses__.
+During this talk, we are going to dive into _Monocle_ and 
+unravel the mystery surrounding __optics__.
 
-Slides [here](https://monadplus.github.io/scala-lenses/). 
+Slides [slides](https://monadplus.github.io/scala-lenses/). 
 
 ## Public
 
@@ -13,7 +13,7 @@ This talk is aimed for developers with basic notion of:
  
 The examples are in written in Scala so a basic notion of the syntax is assumed. 
 
-If you are not acquainted with the words `Functor, Appicative, Foldable, Traversable`
+If you are not acquainted with the words `Functor, Appicative, Foldable, Traverse`
 I would recommend visiting first the [typeclassopedia](https://wiki.haskell.org/Typeclassopedia) 
 and get a basic notion of these concepts.   
 
@@ -50,16 +50,16 @@ With lenses:
 
 ## Libraries
 
-Lenses provides __more composable__ versions of the abstractions you already known how to use in Haskell/Scala.
+Lenses provides __more composable__ versions of the abstractions you already known how to use in Scala/Haskell.
 
- - [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals) (haskell)
  - [monocle](https://github.com/julien-truffaut/Monocle) (scala)
+ - [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals) (haskell)
  
 Both libraries provides rich APIs to work with lenses and a battery of utilities to make your life easier.
+Lenses is based on Van Laarhoven optics while Monocle uses an alternative encoding. The reason behind not using
+Van Laarhoven nor profunctor optics is because they are inefficient in scala and not well supported by the language
+(scala does not support N-rank types).  
 
-From my point of view, it's easier to start with [monocle](https://github.com/julien-truffaut/Monocle)
-and follow with [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals). 
-The implementation of monocle is way more simple (and limited) than E. Kmett library.
 
 ## Hierarchy
 

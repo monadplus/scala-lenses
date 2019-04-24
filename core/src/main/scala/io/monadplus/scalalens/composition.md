@@ -15,7 +15,7 @@
 ```
 
 
-Functor do compose !  
+Functor does compose !  
 ```haskell
 fmap           :: Functor f
                => (a -> b) -> f a         -> f b
@@ -47,6 +47,4 @@ traverse.traverse.traverse :: (Traversable f, Traversable g, Traversable h, Appl
                            => (a -> m b) -> f (g (h a)) -> m (f (g (h b)))
 ```
 
-
-### Credit: 
- - https://github.com/ekmett/lens/wiki/Derivation
+Source: https://github.com/ekmett/lens/wiki/Derivation

@@ -6,37 +6,33 @@ import monocle.Traversal
 import mouse.all._
 
 /*
-  It allows you to traverse over a structure and change out its contents with monadic or Applicative side-effects.
-  A Traversal s t a b is a generalization of traverse from Traversable.
+  Traversal[S, A]
 
-    traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
-    type Traversal s t a b = forall f. Applicative f => (a -> f b) -> s -> f t
+  It allows you to traverse over a structure and change out
+     its contents with monadic or Applicative side-effects.
 
-  A Traversal can be used as a Fold.
-  Any Traversal can be used for Getting like a Fold, because given a Monoid m, we have an Applicative for (Const m).
+  def modifyF[F[_]: Applicative](f: A => F[B])(s: S): F[T]
 
-  TL;DR everything you know how to do with a Traversable container, you can with a Traversal.
+  Everything you know how to do with a Traverse container, you can with a Traversal.
  */
 object TraversalExample extends App {
 
   val xs = List(1, 2, 3, 4, 5)
 
   val eachL = Traversal.fromTraverse[List, Int]
-  eachL.set(0)(xs) //  List(0, 0 ...)
-  eachL.modify(_ + 1)(xs)
+  eachL.set(0)(xs) // List(0, 0, 0, 0, 0)
+  eachL.modify(_ + 1)(xs) // List(2, 3, 4, 5, 6)
 
   // Traversal is also a Fold
   eachL.getAll(xs) // xs ...
   eachL.headOption(xs) // Some(1)
   eachL.find(_ > 3)(xs) // Some(4)
-  eachL.all(_ % 2 == 0)(xs)
+  eachL.all(_ % 2 == 0)(xs) // false
 
   case class Point(id: String, x: Int, y: Int)
   val points = Traversal.apply2[Point, Int](_.x, _.y)((x, y, p) => p.copy(x = x, y = y))
 
-  println {
-    points.set(5)(Point("bottom-left", 0, 0))
-  }
+  points.set(5)(Point("bottom-left", 0, 0)) // Point(bottom-left,5,5)
 
   def filterKey[K, V](predicate: K => Boolean): Traversal[Map[K, V], V] =
     new Traversal[Map[K, V], V] {
@@ -50,8 +46,7 @@ object TraversalExample extends App {
     }
 
   val m = Map(1 -> "one", 2 -> "two", 3 -> "three", 4 -> "Four")
-  val result = filterKey[Int, String](_ % 2 == 0).modify(_.toUpperCase)(m)
-  println(result) // Map(1 -> one, 2 -> TWO, 3 -> three, 4 -> FOUR)
+  filterKey[Int, String](_ % 2 == 0).modify(_.toUpperCase)(m) // Map(1 -> one, 2 -> TWO, 3 -> three, 4 -> FOUR)
 }
 
 object TraversalLaws {

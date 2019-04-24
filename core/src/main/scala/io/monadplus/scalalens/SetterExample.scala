@@ -7,21 +7,14 @@ import doobie.util.query._
 import doobie.util.query.Query._
 
 /*
-  A Setter s t a b is a generalization of fmap from Functor.
+  Setter[S, A]: generalisation of Functor:
+     map:    (A => B) => F[A] => F[B]
+     modify: (A => A) => S    => S
 
   It allows you to map into a structure and change out the contents,
     but it isn't strong enough to allow you to enumerate those contents.
 
-    fmap :: Functor f => (a -> b) -> f a -> f b
-    monofmap ::          (a -> b) -> s -> t
-
-  Then decorate it with Identity to obtain:
-
-    type Setter s t a b = (a -> Identity b) -> s -> Identity t
-
-  Every Traversal is a valid Setter, since Identity is Applicative.
-
-  TL;DR: everything you can do with a Functor, you can do with a Setter.
+  Everything you can do with a Functor, you can do with a Setter.
  */
 object SetterExample extends App {
 
@@ -42,9 +35,11 @@ object SetterExample extends App {
   personAge.modify(_ + 1)(sherlock)
   personAge.set(21)(sherlock)
 
-  personAddress.composeSetter(addressNumber).modify(_ + 1)
+  personAddress.composeSetter(addressNumber).modify(_ + 1) 
+  // res: Person("Sherlock Holmes", 21, Address(221, "Baker Street"))
   personAddress.composeSetter(addressNumber).set(200)
 
+  // derive from functor
   PSetter.fromFunctor[List, Int, String]
   // circe Encoder
   PSetter.fromContravariant[Encoder, Int, String]

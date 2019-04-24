@@ -15,6 +15,7 @@ val catsMtlV = "0.4.0"
 val fs2V = "1.0.3"
 val http4sV = "0.20.0-RC1"
 val circeV = "0.11.1"
+val circeOpticsV = "0.11.0"
 val doobieV = "0.6.0"
 val pureConfigV = "0.10.2"
 val equalityV = "0.0.2"
@@ -70,6 +71,7 @@ lazy val commonDependencies = Seq(
   "io.circe" %% "circe-core" % circeV,
   "io.circe" %% "circe-generic" % circeV,
   "io.circe" %% "circe-parser" % circeV,
+  "io.circe" %% "circe-optics" % circeOpticsV,
 //  "io.circe" %% "circe-fs2" % circeV,
 
   "org.tpolecat" %% "doobie-core" % doobieV,

@@ -9,23 +9,12 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global // derive Functor instance for Future
 
 /*
-  type Lens s t a b = forall f. Functor f => (a -> f b) -> s -> f t
-  type Lens' s a = Lens s s a a
+  A Lens[S, A] can be seen as a pair of functions:
+    get: S => A
+    set: (A, S) => S
 
-  A lens can be seen as pair of function:
-    get :: s -> a
-    set :: (b, s) -> t
-
-  Every Lens is a valid Setter.
-
-  Every Lens can be used for Getting like a Fold that doesn't use the Applicative or Contravariant.
-
-  Every Lens is a valid Traversal that only uses the Functor part of the Applicative it is supplied.
-
-  Every Lens can be used for Getting like a valid Getter.
-
-  Since every Lens can be used for Getting like a valid Getter it follows that it must view exactly one element in the structure.
- */
+  Typically a Lens can be defined between a Product and one of its component.
+*/
 object LensExample extends App {
   case class Address(streetNumber: Int, streetName: String)
 
@@ -41,8 +30,8 @@ object LensExample extends App {
   def neighbors(n: Int): List[Int] =
     if (n > 0) List(n - 1, n + 1) else List(n + 1)
 
-  val res = streetNumber.modifyF(neighbors)(address)
-  println(res) // List(address(n - 1), address(n + 1))
+  streetNumber.modifyF(neighbors)(address)
+  // res: List(Address(0,The shire), Address(2,The shire))
 
   def updateNumber(n: Int): Future[Int] = Future.successful(n + 1)
   streetNumber.modifyF(updateNumber)(address) // Future[Address]
@@ -54,8 +43,8 @@ object LensExample extends App {
   val personAddress = GenLens[Person](_.address)
 
   val john = Person("John", 20, address)
-  personAddress.composeLens(streetNumber).get(john)
-  personAddress.composeLens(streetNumber).set(2)(john)
+  personAddress.composeLens(streetNumber).get(john) // 20 
+  personAddress.composeLens(streetNumber).set(2)(john) // Person(John,20,Address(2,The shire))
 }
 
 object LensLaws {
@@ -140,7 +129,5 @@ object PolyLensGeneration extends App {
   Semi.default.get(candyTrade)
   Foo.default.get(candyTrade)
 
-  val res =
-    Foo.q.modify((_: Map[(Int, Symbol), Double]).updated((0, Symbol("Buy")), -2.0))(candyTrade)
-  println(res) // candyTrade.copy(q = candyTrade.q.updated((0, Symbol("Buy")), -2.0))
+  Foo.q.modify((_: Map[(Int, Symbol), Double]).updated((0, Symbol("Buy")),-2.0))(candyTrade)
 }

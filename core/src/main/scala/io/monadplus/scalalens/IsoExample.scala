@@ -3,12 +3,22 @@ package io.monadplus.scalalens
 import monocle.Iso
 import monocle.macros.GenIso
 
+/*
+  An Iso[S, A] defines an isomorphism between the type S and A
+
+               get
+     -------------------->
+   S                       A
+     <--------------------
+          reverseGet
+*/
 object IsoExample {
   case class Person(name: String, age: Int)
 
   val personToTuple = Iso[Person, (String, Int)](p => (p.name, p.age)) {
     case (name, age) => Person(name, age)
   }
+  
   personToTuple.get(Person("Zoe", 25))
   personToTuple.reverseGet(("Zoe", 25)) == personToTuple("Zoe", 25)
 

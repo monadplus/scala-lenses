@@ -7,27 +7,13 @@ import monocle.Fold
 import mouse.all._
 
 /*
- A Fold s a is a generalization of something Foldable.
-
+ A Fold[S, A] is a generalization of something Foldable.
  It allows you to extract multiple results from a container.
+ A Foldable container can be characterized by the behavior of foldMap:
 
- A Foldable container can be characterized by the behavior
-  of foldMap :: (Foldable t, Monoid m) => (a -> m) -> t a -> m.
+   def foldMap[M: Monoid](f: A => M)(s: S): M
 
- Since we want to be able to work with monomorphic containers, we could generalize this signature
- to forall m. Monoid m => (a -> m) -> s -> m, and then decorate it with Const to obtain
-
- type Fold s a = forall m. Monoid m => Getting m s a
-
- type Getting r s a = (a -> Const r a) -> s -> Const r s
-
- Every Getter is a valid Fold that simply doesn't use the Monoid it is passed.
-
- Unlike a Traversal a Fold is read-only. Since a Fold cannot be used to write back there are no Lens laws that apply.
-
- Source: https://hackage.haskell.org/package/lens-4.17/docs/Control-Lens-Fold.html
  */
-
 object FoldExample extends App {
   val list = (1 to 10).toList
   val set = (1 to 10).toSet
@@ -40,23 +26,24 @@ object FoldExample extends App {
   val listFold: Fold[List[Int], Int] =
     Fold.fromFoldable[List, Int]
 
-  val sum = listFold.foldMap(Sum.apply)(list)
-  println(s"(List) Sum of values: ${sum.value}")
+  listFold.foldMap(Sum(_))(list)
+  // res: 55
 
-  val sum2 = setFold.foldMap(Sum.apply)(set)
-  println(s"(Set) Sum of values: ${sum2.value}")
+  val sum2 = setFold.foldMap(Sum(_))(set)
+  // res: 55
 
-  println(s"Set to List: ${setFold.getAll(set)}")
+  setFold.getAll(set)
+  // res: List(5, 10, 1, 6, 9, 2, 7, 3, 8, 4)
 
   val maybeList =
     (1 to 10).toList.map(i => (i % 2 == 0).fold(First(i.some), First(none[Int])))
 
-  val sum3 = Fold.fromFoldable[List, First[Int]].fold(maybeList)
-  println(s"(Maybe List) Get first: ${sum3.value}")
+  Fold.fromFoldable[List, First[Int]].fold(maybeList)
+  // res: Some(2)
 
   val evenFold = Fold.select[Int](_ % 2 == 0)
-  val sum4 = listFold.composeFold(evenFold).foldMap(Sum.apply)(list)
-  println(s"(Maybe List) Sum of even values: ${sum4.value}")
+  listFold.composeFold(evenFold).foldMap(Sum.apply)(list)
+  // res: 30
 }
 
 object FoldLaws {

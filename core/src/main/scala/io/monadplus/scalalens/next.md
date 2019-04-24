@@ -2,7 +2,7 @@
 
 For the curious ones, [monocle](https://github.com/julien-truffaut/Monocle) has more to offer:
  - scala.js compatibility
- - scala native compatibility
+ - scala native compatibility (will be dropped in next release)
  - [generics](https://github.com/milessabin/shapeless)
  - [refined](https://github.com/fthomas/refined)
  - Reader/State instances

@@ -10,20 +10,14 @@ import monocle.function.FilterIndex
 import monocle.macros.{GenIso, GenLens, GenPrism}
 import monocle.function.all._
 
-sealed trait Json
-
-case object JNull extends Json
-case class JStr(v: String) extends Json
-case class JNum(v: Double) extends Json
-case class JObj(v: Map[String, Json]) extends Json
-case class JArray(v: List[Json]) extends Json
+import json._
 
 /*
-  type Prism s t a b = forall p f. (Choice p, Applicative f) => p a (f b) -> p s (f t)
+  A Prism[S, A] can be seen as a pair of functions:
+    getOrModify: S => Either[S, A]
+    reverseGet: A => S
 
-  A Prism l is a Traversal that can also be turned around with re to obtain a Getter in the opposite direction.
-
-  A Prism usually encodes  the relation between a Coproduct type and one of its elements.
+  A Prism usually encodes the relation between a Coproduct type and one of its elements.
  */
 object PrismExample extends App {
 
@@ -42,7 +36,7 @@ object PrismExample extends App {
   GenPrism[Json, JNum].composeIso(GenIso[JNum, Double])
   GenPrism[Json, JNum].composeLens(GenLens[JNum](_.v))
 
-  jStr.getOrModify(jsonNum) // Either Json String
+  jStr.getOrModify(jsonNum) // Either[Json,String]
   jStr.reverseGet(str) // Json
   jStr.getOption(JStr("Hello")) // Some
   jStr.getOption(JNum(1.0)) // None
@@ -55,10 +49,11 @@ object PrismExample extends App {
   def validateString(str: String): Either[Error, String] =
     (str.length > 100).either("invalid", str)
 
-  jStr.modifyF(validateString)(jsonStr) // Either String Json
-  jStr.isEmpty(jsonNum)
-  jStr.first[Json].modify { case (str, i) => (str + "!", i) }(jsonStr, jsonNum)
-  jStr.right[Error].set(Right("new str"))(Left("not valid"))
+  jStr.modifyF(validateString)(jsonStr) // Either[String, Json]
+  jStr.isEmpty(jsonNum) // true
+  jStr.first[Json].modify { case (str, i) => (str + "!", i) }(jsonStr, jsonNum) 
+  // res: (JStr("Arnau!"), JNum(7))
+  jStr.right[Error].set(Right("new str"))(Left("not valid")) // Left(not valid)
 }
 
 object PrismLaws {

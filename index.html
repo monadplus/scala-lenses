@@ -18,7 +18,13 @@
 				font-size: 0.6em;
 				line-height: 1.2em;
 			}
-    	</style>
+
+			code.medium {
+				font-size: 0.8em;
+				line-height: 1.4em;
+			}
+		 
+    </style>
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -56,50 +62,29 @@
 				</section>
 				<!--Motivation-->
 				<section>
-					<section data-markdown>
-						<textarea data-template>
-							### Motivation
-
-							Let's update a nested data structure in plain scala.
-							<!-- .element: class="fragment" data-fragment-index="1" -->
-
-							```scala
-							case class Street(number: Int, name: String)
-							case class Address(city: String, street: Street)
-							case class Company(name: String, address: Address)
-							case class Employee(name: String, company: Company)
-							```
-							<!-- .element: class="fragment" data-fragment-index="2" -->
-
-							```scala
-							val employee =
-							  Employee(
-							    name = "john",
-							    company = Company(
-							      name = "awesome inc",
-							      address =  Address("london", Street(23, "high street"))
-							    )
-							  )
-							```
-							<!-- .element: class="fragment" data-fragment-index="2"-->
-						</textarea>
+					<section >
+						<h3>Motivation</h3>
+						<p><small>Let's update a nested data structure in plain scala:</small></p>
+						<pre class="fragment"><code class="scala medium">
+	case class Street(number: Int, name: String)
+	case class Address(city: String, street: Street)
+	case class Company(name: String, address: Address)
+	case class Employee(name: String, company: Company)
+            </code></pre>
 					</section>
-					<section data-markdown>
-						<textarea data-template>
-							Plain scala
-
-							```scala
-							employee.copy(
-							  company = employee.company.copy(
-								address = employee.company.address.copy(
-								  street = employee.company.address.street.copy(
-									name = employee.company.address.street.name.capitalize // luckily capitalize exists
-								  )
-								)
-							  )
-							)
-							```
-						</textarea>
+					<section>
+						<p>Using plain scala</p>
+						<pre class="fragment"><code class="scala smaller">
+employee.copy(
+	company = employee.company.copy(
+		address = employee.company.address.copy(
+			street = employee.company.address.street.copy(
+				name = employee.company.address.street.name.capitalize // luckily capitalize exists
+			)
+		)
+	)
+)
+								</code></pre>
 					</section>
 					<section data-markdown>
 						<textarea data-template>
@@ -153,14 +138,6 @@
 						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
 					</section>
 				</section>
-				<!--Composition-->
-				<section>
-					<h3>Composition</h3>
-					<p>The result is their lowest upper bound in the hierarchy (or an error if that bound doesn't exist).</p>
-					<div style="display: block; height: 80%; width: 80%; margin-left: auto; margin-right: auto">
-						<img src="./images/composition.png"/>
-					</div>
-				</section>
 				<!--Fold-->
 				<section>
 					<section>
@@ -169,26 +146,20 @@
 					</section>
 					<section>
 						<h3>Definition</h3>
-						<pre><code class="scala" embed="FoldExample.scala" line-from="10" line-to="15"></code></pre>
+						<pre><code class="scala medium" embed="FoldExample.scala" line-from="10" line-to="15"></code></pre>
 						<aside class="notes">
 							Fold = Foldable
 							Extract results from container
 						</aside>
 					</section>
 					<section>
-						<h3>The signature</h3>
-						<pre><code class="scala" embed="FoldExample.scala" line-from="20" line-to="22"></code></pre>
-					</section>
-					<section>
 						<h3>Example</h3>
-						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="32" line-to="33"></code></pre>
-						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="35" line-to="41"></code></pre>
-						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="43" line-to="49"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="FoldExample.scala" line-from="18" line-to="19"></code></pre>
+						<pre class="fragment"><code class="scala smaller" embed="FoldExample.scala" line-from="21" line-to="27"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="FoldExample.scala" line-from="29" line-to="36"></code></pre>
 					</section>
 					<section>
-						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="51" line-to="52"></code></pre>
-						<pre class="fragment"><code class="scala" embed="extras/First.scala" line-from="5" line-to="15"></code></pre>
-						<pre class="fragment"><code class="scala" embed="FoldExample.scala" line-from="54" line-to="59"></code></pre>
+						<pre><code class="scala medium" embed="FoldExample.scala" line-from="38" line-to="46"></code></pre>
 					</section>
 				</section>
 				<!--Getter-->
@@ -199,25 +170,16 @@
 					</section>
 					<section>
 						<h3>Definition</h3>
+						<pre><code class="scala medium" embed="GetterExample.scala" line-from="7" line-to="9"></code></pre>
 						<p class="fragment"><small>Everything you can do with a function, you can do with a Getter.</small></p>
-						<pre class="fragment"><code class="haskell">
-Getter :: (s -> a)
-
-	   f ::     (s -> a)
-	   f_cps ::  s -> ((a -> r) -> r)
-	   f_cps :: (a -> r) -> s -> r
-
-
-type Getting r s a = (a -> Const r a) -> s -> Const r s
-type Getter s a = forall r. Getting r s a
-</code></pre>
 						<aside class="notes">
 							Getter = Function
 						</aside>
 					</section>
 					<section>
 						<h3>Example</h3>
-						<pre><code class="scala" embed="GetterExample.scala" line-from="31" line-to="41"></code></pre>
+						<pre><code class="scala small" embed="GetterExample.scala" line-from="12" line-to="22"></code></pre>
+						<pre><code class="scala small" embed="GetterExample.scala" line-from="25" line-to="32"></code></pre>
 					</section>
 				</section>
 				<!--Setter-->
@@ -228,8 +190,8 @@ type Getter s a = forall r. Getting r s a
 					</section>
 					<section>
 						<h3>Definition</h3>
+						<pre class="fragment"><code class="scala medium" embed="SetterExample.scala" line-from="10" line-to="15"></code></pre>
 						<p class="fragment"><small>Everything you can do with a Functor, you can do with a Setter.</small></p>
-						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="10" line-to="20"></code></pre>
 						<aside class="notes">
 							Setter = Functor
 							Modify content but not enumerate it.
@@ -237,23 +199,38 @@ type Getter s a = forall r. Getting r s a
 					</section>
 					<section>
 						<h3>Example</h3>
-						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="28" line-to="31"></code></pre>
-						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="36" line-to="41"></code></pre>
-						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="45" line-to="46"></code></pre>
+						<pre class="fragment"><code class="scala smaller" embed="SetterExample.scala" line-from="21" line-to="40"></code></pre>
 					</section>
 					<section>
 						<h3>Derivation</h3>
-						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="48" line-to="52"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="SetterExample.scala" line-from="42" line-to="47"></code></pre>
 					</section>
 					<section>
 						<h3>Laws</h3>
-						<pre class="fragment"><code class="scala" embed="SetterExample.scala" line-from="55" line-to="68"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="SetterExample.scala" line-from="50" line-to="62"></code></pre>
 					</section>
 				</section>
 				<!--Composition break-->
-				<section data-markdown="./core/src/main/scala/io/monadplus/scalalens/composition.md"
+				<section data-markdown
 						 data-separator="^\n\n\n"
 						 data-separator-vertical="^\n\n">
+						 <textarea data-template>
+								## Composition
+
+								```haskell
+								(.) :: (b -> c) -> (a -> b) -> a -> c
+								(.) g f a = g(f(a))
+								```
+								![composition](../../../../../../../images/composition2.jpg)
+
+
+								## The power of (.)
+								```haskell
+								(.)         :: (a -> b) -> (c -> a)           -> c           -> b
+								(.).(.)     :: (a -> b) -> (c -> d -> a)      -> c -> d      -> b
+								(.).(.).(.) :: (a -> b) -> (c -> d -> e -> a) -> c -> d -> e -> b
+								```
+							</textarea>
 
 				</section>
 				<!--Traversal-->
@@ -264,20 +241,19 @@ type Getter s a = forall r. Getting r s a
 					</section>
 					<section>
 						<h3>Definition</h3>
+						<pre class="fragment"><code class="scala medium" embed="TraversalExample.scala" line-from="9" line-to="14"></code></pre>
 						<p class="fragment"><small>Everything you can do with a Traversable, you can do with a Traversal.</small></p>
-						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="9" line-to="13"></code></pre>
 					</section>
 					<section>
 						<h3>Example</h3>
-						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="22" line-to="32"></code></pre>
+						<pre class="fragment"><code class="scala smaller" embed="TraversalExample.scala" line-from="20" line-to="35"></code></pre>
 					</section>
 					<section>
-						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="34" line-to="39"></code></pre>
-						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="41" line-to="54"></code></pre>
+						<pre class="fragment"><code class="scala smaller" embed="TraversalExample.scala" line-from="37" line-to="49"></code></pre>
 					</section>
 					<section>
 						<h3>Laws</h3>
-						<pre class="fragment"><code class="scala" embed="TraversalExample.scala" line-from="57" line-to="64"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="TraversalExample.scala" line-from="52" line-to="59"></code></pre>
 					</section>
 				</section>
 				<!--Optional-->
@@ -288,8 +264,8 @@ type Getter s a = forall r. Getting r s a
 					</section>
 					<section data-transition="fade-in fade-out">
 						<h3>Definition</h3>
+						<pre class="fragment"><code class="scala medium" embed="OptionalExample.scala" line-from="6" line-to="10"></code></pre>
 						<p class="fragment"><small>A lens where the zoomed element may not exist.</small></p>
-						<pre class="fragment"><code class="scala" embed="OptionalExample.scala" line-from="6" line-to="10"></code></pre>
 						<aside class="notes">
 							Optional is not interesting.
 							Not found in lenses.
@@ -297,9 +273,8 @@ type Getter s a = forall r. Getting r s a
 					</section>
 					<section>
 						<h3>Example</h3>
-						<pre class="fragment"><code class="scala" embed="OptionalExample.scala" line-from="14" line-to="22"></code></pre>
-						<pre class="fragment"><code class="scala" embed="OptionalExample.scala" line-from="24" line-to="25"></code></pre>
-						<pre class="fragment"><code class="scala" embed="OptionalExample.scala" line-from="27" line-to="31"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="OptionalExample.scala" line-from="14" line-to="22"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="OptionalExample.scala" line-from="24" line-to="31"></code></pre>
 					</section>
 				</section>
 				<!--Lens-->
@@ -310,24 +285,21 @@ type Getter s a = forall r. Getting r s a
 					</section>
 					<section data-transition="fade-in fade-out">
 						<h3>Definition</h3>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="15" line-to="17"></code></pre>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="12" line-to="13"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="12" line-to="16"></code></pre>
 					</section>
 					<section>
 						<h3>Example</h3>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="30" line-to="33"></code></pre>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="35" line-to="36"></code></pre>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="38" line-to="39"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="19" line-to="28"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="30" line-to="37"></code></pre>
 					</section>
 					<section data-transition="zoom-in fade-out">
-						<pre><code class="scala" embed="LensExample.scala" line-from="41" line-to="45"></code></pre>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="52" line-to="58"></code></pre>
+						<pre><code class="scala medium" embed="LensExample.scala" line-from="41" line-to="47"></code></pre>
 					</section>
 					<section>
 						<h3>Laws</h3>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="67" line-to="69"></code></pre>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="71" line-to="73"></code></pre>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="75" line-to="77"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="56" line-to="58"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="60" line-to="62"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="64" line-to="66"></code></pre>
 					</section>
 					<section>
 						<h3>Derivation</h3>
@@ -335,18 +307,45 @@ type Getter s a = forall r. Getting r s a
   case class Address(streetNumber: Int, streetName: String)
   case class Person(name: String, age: Int, address: Address)
 						</code></pre>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="91" line-to="96"></code></pre>
-						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="98" line-to="103"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="80" line-to="85"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="87" line-to="92"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="77" line-to="78"></code></pre>
 					</section>
 					<section data-transition="none-in fade-out">
-						<pre><code class="scala" embed="LensExample.scala" line-from="88" line-to="89"></code></pre>
-						<pre class="fragment" data-fragment-index="1"><code class="scala" embed="LensExample.scala" line-from="105"
-																			line-to="105"></code></pre>
-						<pre class="fragment" data-fragment-index="1"><code class="scala" embed="LensExample.scala" line-from="107" line-to="117"></code></pre>
+						<pre class="fragment"><code class="scala smaller" embed="LensExample.scala" line-from="94" line-to="106"></code></pre>
 						<aside class="notes">
 							Polymorphic lens can also be derived t he same way.
 						</aside>
 					</section>
+				</section>
+				<!-- Lens encoding -->
+				<section>
+						<section>
+								<h3>Lens encoding</h3>
+								<p><small>Haskell lenses are based on <b>Van Laarhoven optics</b> family.</small></p>
+								<p class="fragment"><small>Monocle uses a custom encoding on lenses for two reasons</small></p>
+								<p class="fragment"><small>- Performance</small></p>
+								<p class="fragment"><small>- Language limitations</small></p>
+						</section>
+						<section>
+								<h3>Case Class</h3>
+								<pre><code class="scala medium" embed="LensEncoding.scala" line-from="14" line-to="25"></code></pre>
+						</section>
+						<section>
+								<h3>Monocle's</h3>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="28" line-to="51"></code></pre>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="53" line-to="62"></code></pre>
+						</section>
+						<section>
+								<h3>Profunctor</h3>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="65" line-to="84"></code></pre>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="86" line-to="93"></code></pre>
+						</section>
+						<section>
+								<h3>Van Laarhoven</h3>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="96" line-to="113"></code></pre>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="115" line-to="121"></code></pre>
+						</section>
 				</section>
 				<!--Prism-->
 				<section>
@@ -356,37 +355,16 @@ type Getter s a = forall r. Getting r s a
 					</section>
 					<section data-transition="fade-in fade-out">
 						<h3>Definition</h3>
-						<p class="fragment"><small>A Prism usually encodes  the relation between a Coproduct type and one of its elements.</small></p>
-						<pre class="fragment">
-							<code class="haskell">type Prism s t a b = forall p f. (Choice p, Applicative f) => p a	(f b) -> p s (f t)</code>
-						</pre>
-						<p class="fragment">
-							<small>A <b>Prism</b> is a <b>Traversal</b> that can also be turned around with re to obtain a <b>Getter</b> in
-							the opposite direction.</small>
-						</p>
+						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="16" line-to="20"></code></pre>
 					</section>
 					<section>
 						<h3>Example</h3>
-						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="34" line-to="40"></code></pre>
-						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="31" line-to="31"></code></pre>
-						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="55" line-to="58"></code></pre>
+						<pre class="fragment"><code class="scala smaller" embed="PrismExample.scala" line-from="24" line-to="37"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="PrismExample.scala" line-from="48" line-to="56"></code></pre>
 					</section>
 					<section>
 						<h3>Laws</h3>
-						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="64" line-to="73"></code></pre>
-					</section>
-					<section data-background-image="./images/circe.png">
-						<h3 style="color: green">Optics are used in the real world!</h3>
-					</section>
-					<section>
-						<h3>Real World Example</h3>
-						<div class="fragment">
-							<pre><code class="scala" embed="PrismExample.scala" line-from="76" line-to="79"></code></pre>
-							<pre><code class="scala" embed="PrismExample.scala" line-from="81" line-to="99"></code></pre>
-						</div>
-					</section>
-					<section>
-						<pre><code class="scala" embed="PrismExample.scala" line-from="141" line-to="148"></code></pre>
+						<pre class="fragment medium"><code class="scala" embed="PrismExample.scala" line-from="59" line-to="68"></code></pre>
 					</section>
 				</section>
 				<!--Iso-->
@@ -398,9 +376,6 @@ type Getter s a = forall r. Getting r s a
 					<section data-transition="fade-in fade-out">
 						<h3>Definition</h3>
 						<p class="fragment"><small>A valid Lens and a valid Prism.</small></p>
-						<pre class="fragment">
-							<code class="haskell">type Iso s t a b = forall p f. (Profunctor p, Functor f) => p a (f b) -> p s (f t) </code>
-						</pre>
 					</section>
 				</section>
 				<!--Alias-->
@@ -434,14 +409,32 @@ type Getter s a = forall r. Getting r s a
 					</section>
 					<section>
 						<h3>Example: Refined + At</h3>
-						<pre><code class="scala" embed="functions/atExample.scala" line-from="47" line-to="49"></code></pre>
+						<pre><code class="scala medium" embed="functions/atExample.scala" line-from="47" line-to="49"></code></pre>
 					</section>
 					<section>
 						<h3>Example: Each</h3>
-						<pre><code class="scala" embed="functions/eachExample.scala" line-from="12" line-to="13"></code></pre>
-						<pre><code class="scala" embed="functions/eachExample.scala" line-from="22" line-to="23"></code></pre>
+						<pre><code class="scala medium" embed="functions/eachExample.scala" line-from="12" line-to="13"></code></pre>
+						<pre><code class="scala medium" embed="functions/eachExample.scala" line-from="22" line-to="23"></code></pre>
 					</section>
 				</section>
+				<!-- Circe Optics -->
+				<section>
+						<section>
+							<h3>Circe Optics</h3>
+							<pre class="fragment"><code class="scala smaller" embed="CirceJsonPathExample.scala" line-from="11" line-to="33"></code></pre>
+						</section>
+						<section>
+							<h3>Cursor</h3>
+							<pre><code class="scala medium" embed="CirceJsonPathExample.scala" line-from="36" line-to="42"></code></pre>
+						</section>
+						<section>
+								<h3>Optics</h3>
+								<pre><code class="scala medium" embed="CirceJsonPathExample.scala" line-from="46" line-to="48"></code></pre>
+								<aside class="notes">
+									Dynamics 
+								</aside>
+							</section>
+					</section>
 				<!--Conclusion-->
 				<section>
 					<section>
@@ -449,7 +442,7 @@ type Getter s a = forall r. Getting r s a
 						<p>Lenses are not magic!</p>
 						<p>
 							<small>Lenses provide a rich and
-								<b>composable</b> abstraction to manipulate functional data structures in an imperative way</small>
+								<b>composable</b> abstraction to manipulate functional data structures in an imperative way.</small>
 						</p>
 					</section>
 					<section>
@@ -467,7 +460,7 @@ type Getter s a = forall r. Getting r s a
 							For the curious ones, [monocle](https://github.com/julien-truffaut/Monocle) has more to offer:
 
 							 - scala.js compatibility <!-- .element: class="fragment" -->
-							 - scala native compatibility<!-- .element: class="fragment" -->
+							 - ~~scala native compatibility~~ <!-- .element: class="fragment" -->
 							 - Generics integration<!-- .element: class="fragment" -->
 							 - Refined integration<!-- .element: class="fragment" -->
 							 - Reader/State instances<!-- .element: class="fragment" -->
@@ -498,9 +491,9 @@ type Getter s a = forall r. Getting r s a
 						</ul>
 					</section>
 					<section>
-						<p>
-							Kudos to <a href="https://github.com/kubukoz" target="_blank">Jakub Kozłowski</a> for helping me with the slides.
-						</p>
+						<p>Kudos to:</p>
+						<p><a href="https://github.com/kubukoz" target="_blank">Jakub Kozłowski</a> for helping me with the slides.</p>
+						<p><a href="https://github.com/julien-truffaut" target="_blank">Julien Truffaut</a> and <a href="https://github.com/isaias-b" target="_blank">Isaias Bartelborth</a> for reviewing the slides.</p>
 					</section>
 				</section>
 				<!--Questions-->

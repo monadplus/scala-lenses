@@ -1,6 +1,6 @@
 ## Type Alias
 
-|       Alias     |         Type          |
+|       Alias     |         Type           |
 | --------------- |:----------------------:|
 | Setter[S, A]    | PSetter[S, S, A, A]    |
 | Traversal[S, A] | PTraversal[S, S, A, A] |
