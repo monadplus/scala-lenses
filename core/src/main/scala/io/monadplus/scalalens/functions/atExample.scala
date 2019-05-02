@@ -39,7 +39,7 @@ object atExample extends App {
   // Read & Write
   cookers
     .composeLens(at("Wednesday"))
-    .modify(_.fold(Cooker("Maria").some)(c => Some(c)))(restaurant)
+    .modify(_.fold(Cooker("Airam").some)(c => Some(c)))(restaurant)
 
   // Delete
   cookers.composeLens(at("Wednesday")).set(None)(restaurant)

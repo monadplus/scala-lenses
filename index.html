@@ -118,7 +118,7 @@ employee.copy(
 					</section>
 					<section>
 						<img src="./images/signature.png"/>
-						<img class="fragment" src="http://www.reactiongifs.com/r/lolof1.gif"/>
+						<img src="http://www.reactiongifs.com/r/lolof1.gif"/>
 					</section>
 				</section>
 				<!--hierarchy-->
@@ -126,17 +126,51 @@ employee.copy(
 					<section>
 						<h3>Lenses hierarchy</h3>
 					</section>
-					<section>
+					<!-- <section>
 						<p><a>Lenses (haskell)</a></p>
 						<img src="./images/lens-hierarchy.png" style="width: 600px; height: 500px;"/>
 						<aside class="notes">
 							A lot of type aliases
 						</aside>
-					</section>
+					</section> -->
 					<section>
 						<p><a>Monocle (scala)</a></p>
 						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
 					</section>
+				</section>
+				<!--Composition-->
+				<section data-markdown
+						 data-separator="^\n\n\n"
+						 data-separator-vertical="^\n\n">
+						 <textarea data-template>
+								## Composition
+
+								```haskell
+								(.) :: (b -> c) -> (a -> b) -> a -> c
+								(.) g f a = g(f(a))
+								```
+								![composition](../../../../../../../images/composition2.jpg)
+
+
+								## The power of (.)
+								```haskell
+								(.)         :: (a -> b) -> (c -> a)         -> c         -> b
+								(.).(.)     :: (a -> b) -> (c -> d -> a)    -> c -> d    -> b
+
+								fmap               :: (a -> b) -> f a     -> f b
+								fmap . fmap        :: (a -> b) -> f g a   -> f g b
+								fmap . fmap . fmap :: (a -> b) -> f g h a -> f g h b
+								```
+							</textarea>
+
+				</section>
+				<!-- Laws -->
+				<section>
+					<h3>Laws</h3>
+					<p><small>Lenses</small></p>
+					<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="56" line-to="58"></code></pre>
+					<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="60" line-to="62"></code></pre>
+					<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="64" line-to="66"></code></pre>
 				</section>
 				<!--Fold-->
 				<section>
@@ -158,9 +192,9 @@ employee.copy(
 						<pre class="fragment"><code class="scala smaller" embed="FoldExample.scala" line-from="21" line-to="27"></code></pre>
 						<pre class="fragment"><code class="scala medium" embed="FoldExample.scala" line-from="29" line-to="36"></code></pre>
 					</section>
-					<section>
+					<!-- <section>
 						<pre><code class="scala medium" embed="FoldExample.scala" line-from="38" line-to="46"></code></pre>
-					</section>
+					</section> -->
 				</section>
 				<!--Getter-->
 				<section>
@@ -170,7 +204,7 @@ employee.copy(
 					</section>
 					<section>
 						<h3>Definition</h3>
-						<pre><code class="scala medium" embed="GetterExample.scala" line-from="7" line-to="9"></code></pre>
+						<!-- <pre><code class="scala medium" embed="GetterExample.scala" line-from="7" line-to="9"></code></pre> -->
 						<p class="fragment"><small>Everything you can do with a function, you can do with a Getter.</small></p>
 						<aside class="notes">
 							Getter = Function
@@ -179,7 +213,7 @@ employee.copy(
 					<section>
 						<h3>Example</h3>
 						<pre><code class="scala small" embed="GetterExample.scala" line-from="12" line-to="22"></code></pre>
-						<pre><code class="scala small" embed="GetterExample.scala" line-from="25" line-to="32"></code></pre>
+						<!-- <pre><code class="scala small" embed="GetterExample.scala" line-from="25" line-to="32"></code></pre> -->
 					</section>
 				</section>
 				<!--Setter-->
@@ -190,7 +224,7 @@ employee.copy(
 					</section>
 					<section>
 						<h3>Definition</h3>
-						<pre class="fragment"><code class="scala medium" embed="SetterExample.scala" line-from="10" line-to="15"></code></pre>
+						<!-- <pre class="fragment"><code class="scala medium" embed="SetterExample.scala" line-from="10" line-to="15"></code></pre> -->
 						<p class="fragment"><small>Everything you can do with a Functor, you can do with a Setter.</small></p>
 						<aside class="notes">
 							Setter = Functor
@@ -201,37 +235,10 @@ employee.copy(
 						<h3>Example</h3>
 						<pre class="fragment"><code class="scala smaller" embed="SetterExample.scala" line-from="21" line-to="40"></code></pre>
 					</section>
-					<section>
+					<!-- <section>
 						<h3>Derivation</h3>
 						<pre class="fragment"><code class="scala medium" embed="SetterExample.scala" line-from="42" line-to="47"></code></pre>
-					</section>
-					<section>
-						<h3>Laws</h3>
-						<pre class="fragment"><code class="scala medium" embed="SetterExample.scala" line-from="50" line-to="62"></code></pre>
-					</section>
-				</section>
-				<!--Composition break-->
-				<section data-markdown
-						 data-separator="^\n\n\n"
-						 data-separator-vertical="^\n\n">
-						 <textarea data-template>
-								## Composition
-
-								```haskell
-								(.) :: (b -> c) -> (a -> b) -> a -> c
-								(.) g f a = g(f(a))
-								```
-								![composition](../../../../../../../images/composition2.jpg)
-
-
-								## The power of (.)
-								```haskell
-								(.)         :: (a -> b) -> (c -> a)           -> c           -> b
-								(.).(.)     :: (a -> b) -> (c -> d -> a)      -> c -> d      -> b
-								(.).(.).(.) :: (a -> b) -> (c -> d -> e -> a) -> c -> d -> e -> b
-								```
-							</textarea>
-
+					</section> -->
 				</section>
 				<!--Traversal-->
 				<section>
@@ -241,20 +248,21 @@ employee.copy(
 					</section>
 					<section>
 						<h3>Definition</h3>
-						<pre class="fragment"><code class="scala medium" embed="TraversalExample.scala" line-from="9" line-to="14"></code></pre>
+						<!-- <pre class="fragment"><code class="scala medium" embed="TraversalExample.scala" line-from="9" line-to="14"></code></pre> -->
 						<p class="fragment"><small>Everything you can do with a Traversable, you can do with a Traversal.</small></p>
 					</section>
-					<section>
+					<!-- <section>
 						<h3>Example</h3>
 						<pre class="fragment"><code class="scala smaller" embed="TraversalExample.scala" line-from="20" line-to="35"></code></pre>
-					</section>
+					</section> -->
 					<section>
+						<h3>Example</h3>
 						<pre class="fragment"><code class="scala smaller" embed="TraversalExample.scala" line-from="37" line-to="49"></code></pre>
 					</section>
-					<section>
+					<!-- <section>
 						<h3>Laws</h3>
 						<pre class="fragment"><code class="scala medium" embed="TraversalExample.scala" line-from="52" line-to="59"></code></pre>
-					</section>
+					</section> -->
 				</section>
 				<!--Optional-->
 				<section>
@@ -264,7 +272,7 @@ employee.copy(
 					</section>
 					<section data-transition="fade-in fade-out">
 						<h3>Definition</h3>
-						<pre class="fragment"><code class="scala medium" embed="OptionalExample.scala" line-from="6" line-to="10"></code></pre>
+						<!-- <pre class="fragment"><code class="scala medium" embed="OptionalExample.scala" line-from="6" line-to="10"></code></pre> -->
 						<p class="fragment"><small>A lens where the zoomed element may not exist.</small></p>
 						<aside class="notes">
 							Optional is not interesting.
@@ -290,17 +298,17 @@ employee.copy(
 					<section>
 						<h3>Example</h3>
 						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="19" line-to="28"></code></pre>
-						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="30" line-to="37"></code></pre>
+						<!-- <pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="30" line-to="37"></code></pre> -->
 					</section>
-					<section data-transition="zoom-in fade-out">
+					<!-- <section data-transition="zoom-in fade-out">
 						<pre><code class="scala medium" embed="LensExample.scala" line-from="41" line-to="47"></code></pre>
-					</section>
-					<section>
+					</section> -->
+					<!-- <section>
 						<h3>Laws</h3>
 						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="56" line-to="58"></code></pre>
 						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="60" line-to="62"></code></pre>
 						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="64" line-to="66"></code></pre>
-					</section>
+					</section> -->
 					<section>
 						<h3>Derivation</h3>
 						<pre><code class="scala">
@@ -312,7 +320,7 @@ employee.copy(
 						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="77" line-to="78"></code></pre>
 					</section>
 					<section data-transition="none-in fade-out">
-						<pre class="fragment"><code class="scala smaller" embed="LensExample.scala" line-from="94" line-to="106"></code></pre>
+						<pre><code class="scala smaller" embed="LensExample.scala" line-from="94" line-to="106"></code></pre>
 						<aside class="notes">
 							Polymorphic lens can also be derived t he same way.
 						</aside>
@@ -362,10 +370,10 @@ employee.copy(
 						<pre class="fragment"><code class="scala smaller" embed="PrismExample.scala" line-from="24" line-to="37"></code></pre>
 						<pre class="fragment"><code class="scala medium" embed="PrismExample.scala" line-from="48" line-to="56"></code></pre>
 					</section>
-					<section>
+					<!-- <section>
 						<h3>Laws</h3>
 						<pre class="fragment medium"><code class="scala" embed="PrismExample.scala" line-from="59" line-to="68"></code></pre>
-					</section>
+					</section> -->
 				</section>
 				<!--Iso-->
 				<section>
@@ -449,6 +457,7 @@ employee.copy(
 						<p><small>Monocle is a wonderful library.</small></p>
 						<img src="./images/monocle-logo.png"/>
 						<p><small>Give it a try !</small></p>
+						<p class="fragment">Support for 2.13 (soon) !</p>
 					</section>
 				</section>
 				<!--Next steps-->
@@ -459,12 +468,12 @@ employee.copy(
 
 							For the curious ones, [monocle](https://github.com/julien-truffaut/Monocle) has more to offer:
 
-							 - scala.js compatibility <!-- .element: class="fragment" -->
-							 - ~~scala native compatibility~~ <!-- .element: class="fragment" -->
-							 - Generics integration<!-- .element: class="fragment" -->
-							 - Refined integration<!-- .element: class="fragment" -->
-							 - Reader/State instances<!-- .element: class="fragment" -->
-							 - Laws testing<!-- .element: class="fragment" -->
+							 - scala.js compatibility
+							 - ~~scala native compatibility~~
+							 - Generics integration
+							 - Refined integration
+							 - Reader/State instances
+							 - Laws testing
 						</textarea>
 					</section>
 					<section>

@@ -10,8 +10,8 @@ import mouse.all._
 
   It allows you to traverse over a structure and change out
      its contents with monadic or Applicative side-effects.
-
-  def modifyF[F[_]: Applicative](f: A => F[B])(s: S): F[T]
+     
+  def modifyF[F[_]: Applicative](f: A => F[B])(s: S): T
 
   Everything you know how to do with a Traverse container, you can with a Traversal.
  */
