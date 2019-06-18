@@ -10,6 +10,7 @@ import monocle.Monocle._
 */
 object GetterExample extends App {
   case class Box[+A](value: A)
+
   val numBox = Box(7)
   val strBox = Box("Seven")
   val pairBox = Box(7 -> "Seven")

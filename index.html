@@ -23,7 +23,7 @@
 				font-size: 0.8em;
 				line-height: 1.4em;
 			}
-		 
+
     </style>
 
 		<!-- Printing and PDF exports -->
@@ -42,9 +42,9 @@
 				<section>
 					<section>
 						<h2><a>The magic of composition</a></h2>
-						<h3>Diving into van Laarhoven optics</h3>
-						<p><small>Arnau Abella - Software Engineer @ Agilogy</small></p>
-						<p><small>May 3th, 2019 | Barcelona, Spain</small></p>
+						<h3>Diving into optics</h3>
+						<p><small>Arnau Abella - Software Engineer</small></p>
+						<p><small>June 19th, 2019 | Barcelona, Spain</small></p>
 						<br/><br/>
 						<small>Sources: <a href="https://github.com/monadplus/scala-lenses" target="_blank">here</a></small>
 						<aside class="notes">
@@ -112,13 +112,27 @@ employee.copy(
 					</section>
 					<section>
 						<p>Both libraries provides rich APIs to work with lenses and a battery of utilities to make your life easier.</p>
-						<aside class="notes">
-							Monocle is easy to use.
-						</aside>
 					</section>
-					<section>
-						<img src="./images/signature.png"/>
-						<img src="http://www.reactiongifs.com/r/lolof1.gif"/>
+					<section data-markdown>
+						<textarea data-template>
+							## How to use Monocle
+
+Add this on build.sbt:
+
+
+```
+libraryDependencies +=
+  "com.github.julien-truffaut" %%  "monocle-core"  % monocleVersion
+```
+
+
+Add the following imports:
+
+							```scala
+import monocle._
+import monocle.Monocle._
+							```
+						</textarea>
 					</section>
 				</section>
 				<!--hierarchy-->
@@ -127,36 +141,17 @@ employee.copy(
 						<h3>Lenses hierarchy</h3>
 					</section>
 					<section>
-						<p><a>Monocle (scala)</a></p>
+						<p><a>Monocle</a></p>
 						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
 					</section>
 				</section>
 				<!--Composition-->
-				<section data-markdown
-						 data-separator="^\n\n\n"
-						 data-separator-vertical="^\n\n">
-						 <textarea data-template>
-								## Composition
-
-								```haskell
-								(.) :: (b -> c) -> (a -> b) -> a -> c
-								(.) g f a = g(f(a))
-								```
-								![composition](../../../../../../../images/composition2.jpg)
-
-
-								## The power of (.)
-								```haskell
-								(.)         :: (a -> b) -> (c -> a)         -> c         -> b
-								(.).(.)     :: (a -> b) -> (c -> d -> a)    -> c -> d    -> b
-
-								fmap               :: (a -> b) -> f a     -> f b
-								fmap . fmap        :: (a -> b) -> f g a   -> f g b
-								fmap . fmap . fmap :: (a -> b) -> f g h a -> f g h b
-								```
-							</textarea>
-
-				</section>
+        <section>
+					<section>
+						<h3>The power of (.)</h3>
+						<img src="./images/composition3.png" />
+					</section>
+        </section>
 				<!-- Laws -->
 				<section>
 					<h3>Laws</h3>
@@ -319,13 +314,6 @@ employee.copy(
 						</aside>
 					</section>
 				</section>
-				<section>
-						<p><a>Lenses (haskell)</a></p>
-						<img src="./images/lens-hierarchy.png" style="width: 600px; height: 500px;"/>
-						<aside class="notes">
-							A lot of type aliases
-						</aside>
-				</section>
 				<!-- Lens encoding -->
 				<section>
 						<section>
@@ -369,6 +357,9 @@ employee.copy(
 					<section>
 						<h3>Example</h3>
 						<pre class="fragment"><code class="scala smaller" embed="PrismExample.scala" line-from="24" line-to="37"></code></pre>
+					</section>
+					<section>
+						<h3>Example</h3>
 						<pre class="fragment"><code class="scala medium" embed="PrismExample.scala" line-from="48" line-to="56"></code></pre>
 					</section>
 					<!-- <section>
@@ -388,6 +379,7 @@ employee.copy(
 					</section>
 				</section>
 				<!--Alias-->
+        <section>
 				<section data-markdown="./core/src/main/scala/io/monadplus/scalalens/alias.md"
 						 data-separator="^\n\n\n"
 						 data-separator-vertical="^\n\n">
@@ -395,6 +387,32 @@ employee.copy(
 						Types are polymorphics.
 					</aside>
 				</section>
+					<section data-markdown>
+						<textarea data-template>
+### Example of polymorphic prism
+
+```scala
+import monocle.std.either._
+
+stdLeft[Int, Nothing].modify(_ + 1)
+pStdLeft[Int, Nothing, String].modify(_.toString())
+```
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+### Definition of left via pLeft
+
+```scala
+final def left[A, B]: Prism[Either[A,B], A] =
+  pLeft[A, B, A]
+
+final def pLeft[A, B, C]: PPrism[Either[A,B], Either[C,B], A, C] =
+  PPrism[Either[A,B], Either[C,B], A, C](_.swap.bimap(right, identity))(left)
+```
+						</textarea>
+					</section>
+        </section>
 				<!--Monocle functions-->
 				<section>
 					<section data-markdown>
@@ -411,14 +429,19 @@ employee.copy(
 							 - ...
 						</textarea>
 					</section>
+          <section>
+            <h3>At</h3>
+            <p><small>Typeclass that defines a Lens from an `S` to an `A` at an index `I`</small></p>
+          </section>
 					<section>
 						<h3>Example: At</h3>
 						<pre><code class="scala" embed="functions/atExample.scala" line-from="22" line-to="35"></code></pre>
-						<pre class="fragment"><code class="scala" embed="functions/atExample.scala" line-from="39" line-to="42"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="functions/atExample.scala" line-from="37"
+            line-to="45"></code></pre>
 					</section>
 					<section>
 						<h3>Example: Refined + At</h3>
-						<pre><code class="scala medium" embed="functions/atExample.scala" line-from="47" line-to="49"></code></pre>
+						<pre><code class="scala medium" embed="functions/atExample.scala" line-from="47" line-to="52"></code></pre>
 					</section>
 					<section>
 						<h3>Example: Each</h3>
@@ -440,7 +463,7 @@ employee.copy(
 								<h3>Optics</h3>
 								<pre><code class="scala medium" embed="CirceJsonPathExample.scala" line-from="46" line-to="48"></code></pre>
 								<aside class="notes">
-									Dynamics 
+									Dynamics
 								</aside>
 							</section>
 					</section>
@@ -451,18 +474,19 @@ employee.copy(
 						<p>Lenses are not magic!</p>
 						<p>
 							<small>Lenses provide a rich and
-								<b>composable</b> abstraction to manipulate functional data structures in an imperative way.</small>
+                <b>composable</b> abstraction to <b>manipulate (nested) functional data structures</b>.</small>
 						</p>
 					</section>
 					<section>
 						<p><small>Monocle is a wonderful library.</small></p>
 						<img src="./images/monocle-logo.png"/>
 						<p><small>Give it a try !</small></p>
-						<p class="fragment">Support for 2.13 (soon) !</p>
+            <p class="fragment"><strike>Support for 2.13 (soon) !</strike></p>
+            <p class="fragment">Replace scalaz for cats</p>
 					</section>
 				</section>
 				<!--Next steps-->
-				<section>
+				<!--<section>
 					<section data-markdown>
 						<textarea data-template>
 							## Next steps
@@ -477,12 +501,12 @@ employee.copy(
 							 - Laws testing
 						</textarea>
 					</section>
-					<!-- <section>
-						<p>For the brave ones, dive into <a href="https://github.com/ekmett/lens#lens-lenses-folds-and-traversals" target="_blank">
-							lenses</a> and master 'em all!</p>
-						<img src="./images/kmett.jpg"/>
-					</section> -->
-				</section>
+           <section>
+            <p>For the brave ones, dive into <a href="https://github.com/ekmett/lens#lens-lenses-folds-and-traversals" target="_blank">
+              lenses</a> and master 'em all!</p>
+            <img src="./images/kmett.jpg"/>
+          </section>
+				</section>-->
 				<!--acknowledge-->
 				<section>
 					<section>

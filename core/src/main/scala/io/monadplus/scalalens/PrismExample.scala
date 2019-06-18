@@ -45,15 +45,19 @@ object PrismExample extends App {
   jStr.modifyOption(_.reverse)(JNum(1.0))
   jStr.set("Bar")(JStr("Hello"): Json)
 
-  type Error = String
-  def validateString(str: String): Either[Error, String] =
-    (str.length > 100).either("invalid", str)
+  def validateString(str: String): Either[Throwable, String] =
+    (str.length > 100).either(new Exception("invalid"), str)
 
-  jStr.modifyF(validateString)(jsonStr) // Either[String, Json]
+  jStr.modifyF(validateString)(jsonStr) // Either[Throwable, Json]
   jStr.isEmpty(jsonNum) // true
-  jStr.first[Json].modify { case (str, i) => (str + "!", i) }(jsonStr, jsonNum) 
+  jStr.first[Json].modify { case (str, i) => (str + "!", i) }(jsonStr, jsonNum)
   // res: (JStr("Arnau!"), JNum(7))
-  jStr.right[Error].set(Right("new str"))(Left("not valid")) // Left(not valid)
+  jStr.right[Throwable].set(Right("new str"))(Left(new Exception("nope")))
+
+  import monocle.std.either._
+
+  stdLeft[Int, Nothing].modify(_ + 1)
+  pStdLeft[Int, Nothing, String].modify(_.toString())
 }
 
 object PrismLaws {

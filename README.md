@@ -1,21 +1,21 @@
-# The magic of composition 
+# The magic of composition
 
-During this talk, we are going to dive into _Monocle_ and 
+During this talk, we are going to dive into _Monocle_ and
 unravel the mystery surrounding __optics__.
 
-Slides [slides](https://monadplus.github.io/scala-lenses/). 
+Slides [here](https://monadplus.github.io/scala-lenses/).
 
 ## Public
 
 This talk is aimed for developers with basic notion of:
  - Scala
  - Functional programming
- 
-The examples are in written in Scala so a basic notion of the syntax is assumed. 
+
+The examples are in written in Scala so a basic notion of the syntax is assumed.
 
 If you are not acquainted with the words `Functor, Appicative, Foldable, Traverse`
-I would recommend visiting first the [typeclassopedia](https://wiki.haskell.org/Typeclassopedia) 
-and get a basic notion of these concepts.   
+I would recommend visiting first the [cats](https://typelevel.org/cats/typeclasses.html)
+and [typeclassopedia](https://wiki.haskell.org/Typeclassopedia) and get a basic notion of these concepts.
 
 ## Motivation
 
@@ -43,10 +43,10 @@ employee.copy(
 
 With lenses:
 ```scala
-(company composeLens 
- address composeLens 
+(company composeLens
+ address composeLens
  street composeLens streetName).modify(_.capitalize)(employee)
-``` 
+```
 
 ## Libraries
 
@@ -54,11 +54,11 @@ Lenses provides __more composable__ versions of the abstractions you already kno
 
  - [monocle](https://github.com/julien-truffaut/Monocle) (scala)
  - [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals) (haskell)
- 
+
 Both libraries provides rich APIs to work with lenses and a battery of utilities to make your life easier.
 Lenses is based on Van Laarhoven optics while Monocle uses an alternative encoding. The reason behind not using
 Van Laarhoven nor profunctor optics is because they are inefficient in scala and not well supported by the language
-(scala does not support N-rank types).  
+(scala does not support N-rank types).
 
 
 ## Hierarchy
@@ -70,7 +70,7 @@ _Monocle lenses hierarchy_
 ![Class Diagram](http://i.imgur.com/ALlbPRa.png)
 
 _Lenses hierarchy in haskell_
- 
+
 ## Composition
 
 The result is their lowest upper bound in the hierarchy (or an error if that bound doesn't exist).
@@ -78,13 +78,13 @@ The result is their lowest upper bound in the hierarchy (or an error if that bou
 |               | Getter     | Iso        | Lens       | Optional     | Prism      | Setter     | Traversal     |
 | ------------- |:----------:|:----------:|:----------:|:------------:|:----------:|:----------:|:-------------:|
 | **Getter**    | **Getter** | Getter     | Getter     | Fold         | Fold       | -          | Fold          |
-| **Iso**       | Getter     | **Iso**    | Lens       | Optional     | Prism      | Setter     | Traversal     | 
+| **Iso**       | Getter     | **Iso**    | Lens       | Optional     | Prism      | Setter     | Traversal     |
 | **Lens**      | Getter     | Lens       | **Lens**   | Optional     | Optional   | Setter     | Traversal     |
 | **Optional**  | Fold       | Optional   | Optional   | **Optional** | Optional   | Setter     | Traversal     |
 | **Prism**     | Fold       | Prism      | Optional   | Optional     | **Prism**  | Setter     | Traversal     |
 | **Setter**    | -          | Setter     | Setter     | Setter       | Setter     | **Setter** | Setter        |
 | **Traversal** | Fold       | Traversal  | Traversal  | Traversal    | Traversal  | Setter     | **Traversal** |
 
-## Credits: 
+## Credits:
  - https://github.com/julien-truffaut/Monocle (J. Truffaut et al)
  - https://hackage.haskell.org/package/lens (E. Kmett)

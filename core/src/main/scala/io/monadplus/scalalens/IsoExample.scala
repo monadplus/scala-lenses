@@ -1,6 +1,7 @@
 package io.monadplus.scalalens
 
 import monocle.Iso
+import monocle.PIso
 import monocle.macros.GenIso
 
 /*
@@ -18,7 +19,7 @@ object IsoExample {
   val personToTuple = Iso[Person, (String, Int)](p => (p.name, p.age)) {
     case (name, age) => Person(name, age)
   }
-  
+
   personToTuple.get(Person("Zoe", 25))
   personToTuple.reverseGet(("Zoe", 25)) == personToTuple("Zoe", 25)
 
@@ -37,6 +38,9 @@ object IsoExample {
   GenIso[MyString, String].get(MyString("Hello"))
   GenIso.unit[Foo]
   GenIso.fields[Person].get(Person("John", 30))
+
+  def pListToVector[A, B]: PIso[List[A], List[B], Vector[A], Vector[B]] =
+    PIso[List[A], List[B], Vector[A], Vector[B]](_.toVector)(_.toList)
 }
 
 object IsoLaws {

@@ -27,10 +27,10 @@ object FoldExample extends App {
     Fold.fromFoldable[List, Int]
 
   listFold.foldMap(Sum(_))(list)
-  // res: 55
+  // res: Sum(55)
 
   val sum2 = setFold.foldMap(Sum(_))(set)
-  // res: 55
+  // res: Sum(55)
 
   setFold.getAll(set)
   // res: List(5, 10, 1, 6, 9, 2, 7, 3, 8, 4)

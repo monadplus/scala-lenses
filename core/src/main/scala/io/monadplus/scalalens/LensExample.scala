@@ -7,6 +7,7 @@ import monocle.macros.syntax.lens._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global // derive Functor instance for Future
+import monocle.Optional
 
 /*
   A Lens[S, A] can be seen as a pair of functions:
@@ -43,7 +44,7 @@ object LensExample extends App {
   val personAddress = GenLens[Person](_.address)
 
   val john = Person("John", 20, address)
-  personAddress.composeLens(streetNumber).get(john) // 20 
+  personAddress.composeLens(streetNumber).get(john) // 20
   personAddress.composeLens(streetNumber).set(2)(john) // Person(John,20,Address(2,The shire))
 }
 

@@ -38,13 +38,16 @@ object atExample extends App {
 
   // Read & Write
   cookers
-    .composeLens(at("Wednesday"))
-    .modify(_.fold(Cooker("Airam").some)(c => Some(c)))(restaurant)
+    .composeLens(at("Saturday"))
+    .modify(_.fold(Cooker("Arnau").some)(c => Some(c)))(restaurant)
 
   // Delete
   cookers.composeLens(at("Wednesday")).set(None)(restaurant)
 
   // Bitwise operations
-  val res = 32.applyLens(bits.intAt.at(0)).set(true) // implicits: at(0: IntBits)
-  println(s"Setting lower bit of 32 to 1: $res")
+  val res = 32.applyLens(bits.intAt.at(0)).set(true)
+  println(s"Setting lower bit of 32 to 1: $res") // res = 33
+
+  // implicit val intAt : At[Int , IntBits , Boolean] = fromBits[Int , IntBits ](_.value)
+  // type IntBits = ZeroTo[W.`31`.T]
 }

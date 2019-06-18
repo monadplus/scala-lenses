@@ -38,7 +38,7 @@ object SetterExample extends App {
   personAddress.composeSetter(addressNumber).modify(_ + 1)(sherlock)
   // res: Person("Sherlock Holmes", 20, Address(222, "Baker Street"))
 
-  
+
   // derive from functor
   PSetter.fromFunctor[List, Int, String]
   // circe Encoder
