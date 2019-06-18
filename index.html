@@ -1,0 +1,591 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>The magic of composition</title>
+
+		<!--<link rel="stylesheet" href="css/reset.css">-->
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/beige.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/solarized-light.css">
+
+		<style>
+			code.smaller {
+				font-size: 0.6em;
+				line-height: 1.2em;
+			}
+
+			code.medium {
+				font-size: 0.8em;
+				line-height: 1.4em;
+			}
+
+    </style>
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!--Intro-->
+				<section>
+					<section>
+						<h2><a>The magic of composition</a></h2>
+						<h3>Diving into optics</h3>
+						<p><small>Arnau Abella - Software Engineer</small></p>
+						<p><small>June 19th, 2019 | Barcelona, Spain</small></p>
+						<br/><br/>
+						<small>Sources: <a href="https://github.com/monadplus/scala-lenses" target="_blank">here</a></small>
+						<aside class="notes">
+							Remark the repository.
+						</aside>
+					</section>
+					<section>
+						<h3><a>About me</a></h3>
+						<!--<br/>-->
+						<div style="display: block; height: 80%; width: 80%; margin-left: auto; margin-right: auto">
+							<img src="./images/github.png"/>
+						</div>
+						<p><small>More information <a href="https://monadplus.github.io/" target="_blank">here</a></small></p>
+					</section>
+				</section>
+				<!--Motivation-->
+				<section>
+					<section >
+						<h3>Motivation</h3>
+						<p><small>Let's update a nested data structure in plain scala:</small></p>
+						<pre class="fragment"><code class="scala medium">
+	case class Street(number: Int, name: String)
+	case class Address(city: String, street: Street)
+	case class Company(name: String, address: Address)
+	case class Employee(name: String, company: Company)
+            </code></pre>
+					</section>
+					<section>
+						<p>Using plain scala</p>
+						<pre class="fragment"><code class="scala smaller">
+employee.copy(
+	company = employee.company.copy(
+		address = employee.company.address.copy(
+			street = employee.company.address.street.copy(
+				name = employee.company.address.street.name.capitalize // luckily capitalize exists
+			)
+		)
+	)
+)
+								</code></pre>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							Using lenses
+
+							```scala
+							(company composeLens
+							 address composeLens
+							 street composeLens streetName).modify(_.capitalize)(employee)
+							```
+						</textarea>
+					</section>
+				</section>
+				<!--Libraries-->
+				<section>
+					<section data-markdown>
+						<textarea data-template>
+							## Libraries
+
+							Lenses provides __more composable__ versions of the abstractions you already known how to use in Haskell/Scala.
+
+							  - [lenses](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals) (haskell)
+							  - [monocle](https://github.com/julien-truffaut/Monocle) (scala)
+						</textarea>
+					</section>
+					<section>
+						<p>Both libraries provides rich APIs to work with lenses and a battery of utilities to make your life easier.</p>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							## How to use Monocle
+
+Add this on build.sbt:
+
+
+```
+libraryDependencies +=
+  "com.github.julien-truffaut" %%  "monocle-core"  % monocleVersion
+```
+
+
+Add the following imports:
+
+							```scala
+import monocle._
+import monocle.Monocle._
+							```
+						</textarea>
+					</section>
+				</section>
+				<!--hierarchy-->
+				<section>
+					<section>
+						<h3>Lenses hierarchy</h3>
+					</section>
+					<section>
+						<p><a>Monocle</a></p>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+				</section>
+				<!--Composition-->
+        <section>
+					<section>
+						<h3>The power of (.)</h3>
+						<img src="./images/composition3.png" />
+					</section>
+        </section>
+				<!-- Laws -->
+				<section>
+					<h3>Laws</h3>
+					<p><small>Lenses</small></p>
+					<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="56" line-to="58"></code></pre>
+					<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="60" line-to="62"></code></pre>
+					<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="64" line-to="66"></code></pre>
+				</section>
+				<!--Fold-->
+				<section>
+					<section>
+						<h3>Fold</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section>
+						<h3>Definition</h3>
+						<pre><code class="scala medium" embed="FoldExample.scala" line-from="10" line-to="15"></code></pre>
+						<aside class="notes">
+							Fold = Foldable
+							Extract results from container
+						</aside>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala medium" embed="FoldExample.scala" line-from="18" line-to="19"></code></pre>
+						<pre class="fragment"><code class="scala smaller" embed="FoldExample.scala" line-from="21" line-to="27"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="FoldExample.scala" line-from="29" line-to="36"></code></pre>
+					</section>
+					<!-- <section>
+						<pre><code class="scala medium" embed="FoldExample.scala" line-from="38" line-to="46"></code></pre>
+					</section> -->
+				</section>
+				<!--Getter-->
+				<section>
+					<section>
+						<h3>Getter</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section>
+						<h3>Definition</h3>
+						<!-- <pre><code class="scala medium" embed="GetterExample.scala" line-from="7" line-to="9"></code></pre> -->
+						<p class="fragment"><small>Everything you can do with a function, you can do with a Getter.</small></p>
+						<aside class="notes">
+							Getter = Function
+						</aside>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre><code class="scala small" embed="GetterExample.scala" line-from="12" line-to="22"></code></pre>
+						<!-- <pre><code class="scala small" embed="GetterExample.scala" line-from="25" line-to="32"></code></pre> -->
+					</section>
+				</section>
+				<!--Setter-->
+				<section>
+					<section>
+						<h3>Setter</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section>
+						<h3>Definition</h3>
+						<!-- <pre class="fragment"><code class="scala medium" embed="SetterExample.scala" line-from="10" line-to="15"></code></pre> -->
+						<p class="fragment"><small>Everything you can do with a Functor, you can do with a Setter.</small></p>
+						<aside class="notes">
+							Setter = Functor
+							Modify content but not enumerate it.
+						</aside>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala smaller" embed="SetterExample.scala" line-from="21" line-to="40"></code></pre>
+					</section>
+					<!-- <section>
+						<h3>Derivation</h3>
+						<pre class="fragment"><code class="scala medium" embed="SetterExample.scala" line-from="42" line-to="47"></code></pre>
+					</section> -->
+				</section>
+				<!--Traversal-->
+				<section>
+					<section>
+						<h3>Traversal</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section>
+						<h3>Definition</h3>
+						<!-- <pre class="fragment"><code class="scala medium" embed="TraversalExample.scala" line-from="9" line-to="14"></code></pre> -->
+						<p class="fragment"><small>Everything you can do with a Traversable, you can do with a Traversal.</small></p>
+					</section>
+					<!-- <section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala smaller" embed="TraversalExample.scala" line-from="20" line-to="35"></code></pre>
+					</section> -->
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala smaller" embed="TraversalExample.scala" line-from="37" line-to="49"></code></pre>
+					</section>
+					<!-- <section>
+						<h3>Laws</h3>
+						<pre class="fragment"><code class="scala medium" embed="TraversalExample.scala" line-from="52" line-to="59"></code></pre>
+					</section> -->
+				</section>
+				<!--Optional-->
+				<section>
+					<section>
+						<h3>Optional</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h3>Definition</h3>
+						<!-- <pre class="fragment"><code class="scala medium" embed="OptionalExample.scala" line-from="6" line-to="10"></code></pre> -->
+						<p class="fragment"><small>A lens where the zoomed element may not exist.</small></p>
+						<aside class="notes">
+							Optional is not interesting.
+							Not found in lenses.
+						</aside>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala medium" embed="OptionalExample.scala" line-from="14" line-to="22"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="OptionalExample.scala" line-from="24" line-to="31"></code></pre>
+					</section>
+				</section>
+				<!--Lens-->
+				<section>
+					<section>
+						<h3>Lens</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h3>Definition</h3>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="12" line-to="16"></code></pre>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="19" line-to="28"></code></pre>
+						<!-- <pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="30" line-to="37"></code></pre> -->
+					</section>
+					<!-- <section data-transition="zoom-in fade-out">
+						<pre><code class="scala medium" embed="LensExample.scala" line-from="41" line-to="47"></code></pre>
+					</section> -->
+					<!-- <section>
+						<h3>Laws</h3>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="56" line-to="58"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="60" line-to="62"></code></pre>
+						<pre class="fragment"><code class="scala" embed="LensExample.scala" line-from="64" line-to="66"></code></pre>
+					</section> -->
+					<section>
+						<h3>Derivation</h3>
+						<pre><code class="scala">
+  case class Address(streetNumber: Int, streetName: String)
+  case class Person(name: String, age: Int, address: Address)
+						</code></pre>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="80" line-to="85"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="87" line-to="92"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="LensExample.scala" line-from="77" line-to="78"></code></pre>
+					</section>
+					<section data-transition="none-in fade-out">
+						<pre><code class="scala smaller" embed="LensExample.scala" line-from="94" line-to="106"></code></pre>
+						<aside class="notes">
+							Polymorphic lens can also be derived t he same way.
+						</aside>
+					</section>
+				</section>
+				<!-- Lens encoding -->
+				<section>
+						<section>
+								<h3>Lens encoding</h3>
+								<p><small>Haskell lenses are based on <b>Van Laarhoven optics</b> family.</small></p>
+								<p class="fragment"><small>Monocle uses a custom encoding on lenses for two reasons</small></p>
+								<p class="fragment"><small>- Performance</small></p>
+								<p class="fragment"><small>- Language limitations</small></p>
+								<p class="fragment"><small><a href="https://github.com/julien-truffaut/LensImpl" target="_blank">Benchmarks</a></small></p>
+						</section>
+						<section>
+								<h3>Case Class</h3>
+								<pre><code class="scala medium" embed="LensEncoding.scala" line-from="14" line-to="25"></code></pre>
+						</section>
+						<section>
+								<h3>Monocle's</h3>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="28" line-to="51"></code></pre>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="53" line-to="62"></code></pre>
+						</section>
+						<section>
+								<h3>Profunctor</h3>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="65" line-to="84"></code></pre>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="86" line-to="93"></code></pre>
+						</section>
+						<section>
+								<h3>Van Laarhoven</h3>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="96" line-to="113"></code></pre>
+								<pre><code class="scala smaller" embed="LensEncoding.scala" line-from="115" line-to="121"></code></pre>
+						</section>
+				</section>
+				<!--Prism-->
+				<section>
+					<section>
+						<h3>Prism</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h3>Definition</h3>
+						<pre class="fragment"><code class="scala" embed="PrismExample.scala" line-from="16" line-to="20"></code></pre>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala smaller" embed="PrismExample.scala" line-from="24" line-to="37"></code></pre>
+					</section>
+					<section>
+						<h3>Example</h3>
+						<pre class="fragment"><code class="scala medium" embed="PrismExample.scala" line-from="48" line-to="56"></code></pre>
+					</section>
+					<!-- <section>
+						<h3>Laws</h3>
+						<pre class="fragment medium"><code class="scala" embed="PrismExample.scala" line-from="59" line-to="68"></code></pre>
+					</section> -->
+				</section>
+				<!--Iso-->
+				<section>
+					<section>
+						<h3>Iso</h3>
+						<img src="./images/monocle-hierarchy.png" style="width: 500px; height: 500px;"/>
+					</section>
+					<section data-transition="fade-in fade-out">
+						<h3>Definition</h3>
+						<p class="fragment"><small>A valid Lens and a valid Prism.</small></p>
+					</section>
+				</section>
+				<!--Alias-->
+        <section>
+				<section data-markdown="./core/src/main/scala/io/monadplus/scalalens/alias.md"
+						 data-separator="^\n\n\n"
+						 data-separator-vertical="^\n\n">
+					<aside class="notes">
+						Types are polymorphics.
+					</aside>
+				</section>
+					<section data-markdown>
+						<textarea data-template>
+### Example of polymorphic prism
+
+```scala
+import monocle.std.either._
+
+stdLeft[Int, Nothing].modify(_ + 1)
+pStdLeft[Int, Nothing, String].modify(_.toString())
+```
+						</textarea>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+### Definition of left via pLeft
+
+```scala
+final def left[A, B]: Prism[Either[A,B], A] =
+  pLeft[A, B, A]
+
+final def pLeft[A, B, C]: PPrism[Either[A,B], Either[C,B], A, C] =
+  PPrism[Either[A,B], Either[C,B], A, C](_.swap.bimap(right, identity))(left)
+```
+						</textarea>
+					</section>
+        </section>
+				<!--Monocle functions-->
+				<section>
+					<section data-markdown>
+						<textarea data-template>
+							## Helpers
+
+							Here is a list of all available utility type classes from monocle:
+							 - At
+							 - Cons & Cons1
+							 - Each
+							 - Field1, ..., Field6 & Fields
+							 - FilterIndex
+							 - Index
+							 - ...
+						</textarea>
+					</section>
+          <section>
+            <h3>At</h3>
+            <p><small>Typeclass that defines a Lens from an `S` to an `A` at an index `I`</small></p>
+          </section>
+					<section>
+						<h3>Example: At</h3>
+						<pre><code class="scala" embed="functions/atExample.scala" line-from="22" line-to="35"></code></pre>
+						<pre class="fragment"><code class="scala medium" embed="functions/atExample.scala" line-from="37"
+            line-to="45"></code></pre>
+					</section>
+					<section>
+						<h3>Example: Refined + At</h3>
+						<pre><code class="scala medium" embed="functions/atExample.scala" line-from="47" line-to="52"></code></pre>
+					</section>
+					<section>
+						<h3>Example: Each</h3>
+						<pre><code class="scala medium" embed="functions/eachExample.scala" line-from="12" line-to="13"></code></pre>
+						<pre><code class="scala medium" embed="functions/eachExample.scala" line-from="22" line-to="23"></code></pre>
+					</section>
+				</section>
+				<!-- Circe Optics -->
+				<section>
+						<section>
+							<h3>Circe Optics</h3>
+							<pre class="fragment"><code class="scala smaller" embed="CirceJsonPathExample.scala" line-from="11" line-to="33"></code></pre>
+						</section>
+						<section>
+							<h3>Cursor</h3>
+							<pre><code class="scala medium" embed="CirceJsonPathExample.scala" line-from="36" line-to="42"></code></pre>
+						</section>
+						<section>
+								<h3>Optics</h3>
+								<pre><code class="scala medium" embed="CirceJsonPathExample.scala" line-from="46" line-to="48"></code></pre>
+								<aside class="notes">
+									Dynamics
+								</aside>
+							</section>
+					</section>
+				<!--Conclusion-->
+				<section>
+					<section>
+						<h2>Take away</h2>
+						<p>Lenses are not magic!</p>
+						<p>
+							<small>Lenses provide a rich and
+                <b>composable</b> abstraction to <b>manipulate (nested) functional data structures</b>.</small>
+						</p>
+					</section>
+					<section>
+						<p><small>Monocle is a wonderful library.</small></p>
+						<img src="./images/monocle-logo.png"/>
+						<p><small>Give it a try !</small></p>
+            <p class="fragment"><strike>Support for 2.13 (soon) !</strike></p>
+            <p class="fragment">Replace scalaz for cats</p>
+					</section>
+				</section>
+				<!--Next steps-->
+				<!--<section>
+					<section data-markdown>
+						<textarea data-template>
+							## Next steps
+
+							For the curious ones, [monocle](https://github.com/julien-truffaut/Monocle) has more to offer:
+
+							 - scala.js compatibility
+							 - ~~scala native compatibility~~
+							 - Generics integration
+							 - Refined integration
+							 - Reader/State instances
+							 - Laws testing
+						</textarea>
+					</section>
+           <section>
+            <p>For the brave ones, dive into <a href="https://github.com/ekmett/lens#lens-lenses-folds-and-traversals" target="_blank">
+              lenses</a> and master 'em all!</p>
+            <img src="./images/kmett.jpg"/>
+          </section>
+				</section>-->
+				<!--acknowledge-->
+				<section>
+					<section>
+						<h3>Acknowledgements</h3>
+						<p>This talk wouldn't be possible without countless hours of work of:</p>
+						<ul>
+							<li>
+								<p>J. Truffaut et al (<a href="https://github.com/julien-truffaut/Monocle" target="_blank">monocle</a>)</p>
+							</li>
+							<li>
+								<p>E. Kmett et al (<a href="https://hackage.haskell.org/package/lens" target="_blank">lenses</a>)</p>
+							</li>
+							<li>
+								<p>Many others</p>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<p>Kudos to:</p>
+						<p><a href="https://github.com/kubukoz" target="_blank">Jakub Kozłowski</a> for helping me with the slides.</p>
+						<p><a href="https://github.com/julien-truffaut" target="_blank">Julien Truffaut</a> and <a href="https://github.com/isaias-b" target="_blank">Isaias Bartelborth</a> for reviewing the slides.</p>
+					</section>
+				</section>
+				<!--Questions-->
+				<section>
+					<h2>Questions ?</h2>
+					<ul>
+						<li>Reach me out on Gitter <a href="https://github.com/monadplus" target="_blank">@monadplus</a>!</li>
+					</ul>
+				</section>
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+		<script>
+		    const Embed = ({fetchFileContents}) => {
+				return {
+					insertCode: async elem => {
+						const path = elem.getAttribute("embed");
+						const lineFrom = elem.getAttribute("line-from") || 1
+						const lineTo = elem.getAttribute("line-to") || undefined
+						const fileContents = await fetchFileContents(path);
+						elem.textContent = fileContents.split("\n").slice(lineFrom - 1, lineTo).join("\n")
+					},
+					async init() {
+						const self = this;
+						const elems = document.querySelectorAll("[embed]");
+						await Promise.all([...elems].map(self.insertCode));
+						console.log(`Inserted code for ${elems.length} node(s)`);
+					}
+				};
+			};
+
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					<!--{ src: 'plugin/highlight/highlight.js', async: true }-->
+					 {
+						src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+							hljs.initHighlightingOnLoad();
+						}
+					}
+				]
+			});
+			Reveal.configure({
+			  navigationMode: 'linear'
+			});
+
+			axios.defaults.baseURL = './core/src/main/scala/io/monadplus/scalalens/';
+			Embed({
+				fetchFileContents: path => axios.get(path).then(r => r.data)
+			}).init();
+		</script>
+	</body>
+</html>
